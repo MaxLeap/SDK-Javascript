@@ -7,3 +7,5 @@ release.sh
 
 *.swp
 .idea/
+
+npm-debug.log

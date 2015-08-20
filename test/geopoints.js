@@ -1,47 +1,63 @@
 var post;
-var Post = LC.Object.extend("Post");
-describe("Geopoints",function(){
-  it("save object with geopoints",function(done){
-    // Make a new post
-    var user = LC.User.current();
+var Post = ML.Object.extend('Post');
 
+describe('Geopoints', function(){
+  it('save object with geopoint', function(done){
     post = new Post();
-    post.set("title", "Post Geopoints");
-    post.set("body", " Geopoints content.");
-    post.set("user", user);
-
-    var point = new LC.GeoPoint({latitude: 40.0, longitude: -30.0});
-    post.set("location",point);
-    post.save(null, {
-      success: function(post) {
-        done();
-      },
-      error: function(err){
-        throw err;
-      }
-    });
-
+    post.set('title', 'Post Geopoint');
+    var geoPoint = new ML.GeoPoint(40, -30);
+    post.set('location', geoPoint);
+    post.save().then(function(post){
+      expect(post.get('location')).to.be.ok();
+      done();
+    }).catch(done);
   });
-});
 
-describe("near",function(){
-  it("",function(done){
+  it('near',function(done){
+    var postGeoPoint = post.get('location');
+    var query = new ML.Query(Post);
+    query.near('location', postGeoPoint);
+    query.find().then(function(results){
+      expect(results).to.be.an('array');
+      done();
+    }).catch(done);
+  });
 
-    var postGeoPoint = post.get("location");
-    // Create a query for places
-    var query = new LC.Query(Post);
-    // Interested in locations near user.
-    query.near("location", postGeoPoint);
-    // Limit what could be a lot of points.
+  it('radiansTo', function(){
+    var geoPoint = new ML.GeoPoint(40, -30);
+    var geoPoint2 = new ML.GeoPoint(40, -20);
+
+    var radians = geoPoint.radiansTo(geoPoint2);
+    expect(radians).to.be.ok();
+  });
+
+  it('milesTo', function(){
+    var geoPoint = new ML.GeoPoint(40, -30);
+    var geoPoint2 = new ML.GeoPoint(40, -20);
+
+    var miles = geoPoint.milesTo(geoPoint2);
+    expect(miles).to.be.ok();
+  });
+
+  it('kilometersTo', function(){
+    var geoPoint = new ML.GeoPoint(40, -30);
+    var geoPoint2 = new ML.GeoPoint(40, -20);
+
+    var kilometers = geoPoint.kilometersTo(geoPoint2);
+    expect(kilometers).to.be.ok();
+  });
+
+  it('within geobox', function(done){
+    var query = new ML.Query(Post);
+    var southwest = new ML.GeoPoint(39.97, 116.33);
+    var northeast = new ML.GeoPoint(39.99, 116.37);
+    query.withinGeoBox('location', southwest, northeast);
     query.limit(10);
-    // Final list of objects
-    query.find({
-      success: function(placesObjects) {
-        done();
-      },
-      err:function(err){
-        throw err;
-      }
-    });
+    query.find().then(function(results){
+      expect(results).to.be.an('array');
+      done();
+    }).catch(done);
   });
 });
+
+

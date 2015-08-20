@@ -1,0 +1,77 @@
+<html>
+<head>
+  <title>Test</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../node_modules/mocha/mocha.css" />
+  <script src="../node_modules/mocha/mocha.js"></script>
+  <script src="../node_modules/expect.js/expect.js"></script>
+
+  <!--AV Test init-->
+
+  <script type="text/javascript">var serverURL="http://stg.paas.com/";</script>
+  <script src="../dist/ml.js"></script>
+
+  <script type="text/javascript">
+    mocha.setup('bdd');
+  </script>
+  <script>
+    //maxleap.cn  thfgukqp@www.bccto.me  thfgukqp@www.bccto.me
+    //sessionToken: Ozk1OU7W9_B4HPMTDnHDPsM85tB3wRHlvxhWhHr-l5k
+//    ML.initialize('56273907169e7d0001bd5c92', 'TXV4MFB2SFFQdVpPSjJKYnFtSVdlUQ', 'ZHhUQk15dDhldTB4M1NlcU5tUTBCQQ');
+    ML.initialize('56273907169e7d0001bd5c92', 'TXV4MFB2SFFQdVpPSjJKYnFtSVdlUQ');
+    ML.useCNServer();
+  </script>
+
+  <!--<script>-->
+    <!--//maxleap.com  zbm5ybfn@www.bccto.me  zbm5ybfn@www.bccto.me-->
+    <!--//    ML.initialize('56273907169e7d0001bd5c92', 'TXV4MFB2SFFQdVpPSjJKYnFtSVdlUQ', 'ZHhUQk15dDhldTB4M1NlcU5tUTBCQQ');-->
+    <!--ML.initialize('56430f6d22c9f600012e7bf0', 'TXl0aUd6NkVSckxNNjlxT3NmbUJwZw');-->
+    <!--ML.useENServer();-->
+  <!--</script>-->
+
+  <!--<script>-->
+    <!--//webdev.maxleap.cn  l717wj9g@www.bccto.me  l717wj9g@www.bccto.me-->
+    <!--//    ML.initialize('56273907169e7d0001bd5c92', 'TXV4MFB2SFFQdVpPSjJKYnFtSVdlUQ', 'ZHhUQk15dDhldTB4M1NlcU5tUTBCQQ');-->
+    <!--ML.initialize('5642e33db1a97500015d445e', 'NFdWN05rOVFBamY3dzh6NEdQMzZidw');-->
+    <!--ML.serverURL = 'http://apidev.zcloud.io';-->
+  <!--</script>-->
+
+  <script src="user.js"></script>
+  <script src="object.js"></script>
+  <script src="geopoints.js"></script>
+  <script src="query.js"></script>
+  <script>
+    onload = function(){
+      mocha.run();
+    };
+  </script>
+
+
+
+</head>
+<body>
+
+<div id="mocha"></div>
+
+<input type="file" id="photoFileUpload">
+<input type="button" id="fileUploadButton"/>
+<img id="avatarImg" />
+<script>
+  document.querySelector('#fileUploadButton').addEventListener('click', function(){
+    var fileUploadControl = document.querySelector("#photoFileUpload");
+    if (fileUploadControl.files.length > 0) {
+      var file = fileUploadControl.files[0];
+      var name = "avatar.jpg";
+      var mlFile = new ML.File(name, file);
+      mlFile.save().then(function(file){
+        document.querySelector('#avatarImg').src = file.url();
+      });
+    }
+  });
+</script>
+
+
+
+</body>
+</html>

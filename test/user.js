@@ -1,213 +1,152 @@
-var username="u" + Date.now();
-var email="u" + Date.now() + "@test.com";
-var password="password1";
-describe("User",function(){
-  this.timeout(10000);
-  it("should sign up",function(done){
-    var user = new LC.User();
-    user.set("username", username);
-    user.set("password", password);
-    user.set("email", email);
-    user.set("gender", "female");
-    // other fields can be set just like with Parse.Object
-    user.set("phone", "415-392-0202");
+describe('User', function(){
+  this.timeout(5000);
+  var r = new Date().getTime();
+  var username = 'my name' + r;
+  var password = 'my pass';
+  var email = r + 'tester@example.com';
 
-    user.signUp(null, {
-      success: function(user) {
-        debug(user);
+  describe('#SignUp', function(){
+    it('should signup a user', function(done){
+      var user = new ML.User();
+      user.set('username', username);
+      user.set('password', password);
+      user.set('email', email);
+      user.signUp().then(function(user){
+        expect(user).to.be.ok();
+        expect(user.authenticated()).to.be(true);
+        done();
+      }).catch(done);
+    });
+
+    it('should signup an anonymous user', function(done){
+      var user = new ML.User();
+      user.anonymousSignUp().then(function(user){
         expect(user.id).to.be.ok();
         done();
-        // Hooray! Let them use the app now.
-      },
-      error: function(user, error) {
-        // Show the error message somewhere and let the user try again.
-        throw error;
-      }
+      }).catch(done);
     });
 
-  });
+    it('should respond username already taken', function(done){
+      var user = new ML.User();
+      user.set('username', username);
+      user.set('password', password);
+      user.set('email', email);
 
-
-});
-
-describe("User.logIn and User.become",function(){
-  it("should login",function(done){
-    LC.User.logIn(username, password, {
-      success: function(user) {
-        expect(user.get("username")).to.be(username);
-        console.dir(user);
-        LC.User.become(user._sessionToken, {
-            success: function(theUser) {
-                expect(theUser.get("username")).to.be(username);
-                done();
-            },
-            error: function(err){
-                throw err;
-            }
-        });
-        // Do stuff after successful login.
-      },
-      error: function(user, error) {
-        throw error;
-        // The login failed. Check error to see why.
-      }
-    });
-
-  });
-});
-
-
-describe("Current User",function(){
-  it("should return current user",function(done){
-
-    var currentUser = LC.User.current();
-
-    expect(currentUser).to.be.ok();
-    done();
-  });
-});
-
-describe("User update",function(){
-  it("shoud update name",function(done){
-
-    var user = LC.User.logIn(username, password, {
-      success: function(user) {
-        user.set("username", username);  // attempt to change username
-        user.save(null, {
-          success: function(user) {
-            done();
-            /*
-
-
-               var query = new LC.Query(LC.User);
-               query.get("516528fa30046abfb335f2da", {
-               success: function(userAgain) {
-               userAgain.set("username", "another_username");
-               userAgain.save(null, {
-               error: function(userAgain, error) {
-               done();
-            // This will error, since the Parse.User is not authenticated
-            }
-            });
-            },
-            error: function(err){
-            throw err;
-            }
-            });
-            */
-          }
-        });
-      }
-    });
-  });
-});
-
-describe("Update user password", function() {
-  it("should update password",function(done){
-    var user = LC.User.logIn(username, password, {
-      success: function(user) {
-        user.updatePassword(password, 'new pass').then(function(){
-          LC.User.logIn(username, 'new pass').then(function(user){
-            user.updatePassword('new pass', password).then(function(){
-              done();
-            });
-          });
-        });
-      },
-      error: function(err) {
-        throw err;
-      }
-    });
-  });
-});
-
-describe("User query",function(){
-  it("should return conditoinal users",function(done){
-    var query = new LC.Query(LC.User);
-    query.equalTo("gender", "female");  // find all the women
-    query.find({
-      success: function(women) {
+      user.signUp().then(function(){
+        throw new Error('should not success');
+      }, function(err){
+        expect(err.code).to.be.equal(ML.Error.USERNAME_TAKEN);
         done();
-      }
+      }).catch(done);
     });
 
+    it('should respond email already taken', function(done){
+      var user = new ML.User();
+      user.set('username', 'my name1');
+      user.set('password', 'my pass');
+      user.set('email', email);
+
+      user.signUp().then(function(){
+        throw new Error('should not success');
+      }, function(err){
+        expect(err.code).to.be.equal(ML.Error.EMAIL_TAKEN);
+        done();
+      }).catch(done);
+    });
   });
-});
 
-
-describe("Associations",function(){
-  it("return post relation to user",function(done){
-    var user = LC.User.current();
-
-    // Make a new post
-    var Post = LC.Object.extend("Post");
-    var post = new Post();
-    post.set("title", "My New Post");
-    post.set("body", "This is some great content.");
-    post.set("user", user);
-    post.save(null, {
-      success: function(post) {
-        // Find all posts by the current user
-        var query = new LC.Query(Post);
-        query.equalTo("user", user);
-        query.find({
-          success: function(usersPosts) {
-            expect(usersPosts.length).to.be.ok();
-            done();
-          },
-          error:function(err){
-            throw err;
-          }
-        });
-      }
+  describe('#Login', function(){
+    it('should login a user', function(done){
+      ML.User.logIn(username, password).then(function(user){
+        expect(user.authenticated()).to.be(true);
+        done();
+      }).catch(done);
     });
 
-  });
-});
+    it('should respond missing username', function(done) {
+      var user = new ML.User();
+      user.setPassword(password);
+      user.logIn().then(function(){
+        throw new Error('should not login');
+      }, function(err){
+        expect(err.code).to.be.equal(ML.Error.USERNAME_MISSING);
+        done();
+      }).catch(done);
+    });
 
-describe("Follow/unfollow users",function(){
-  it("should follow/unfollow",function(done){
-    var user = LC.User.current();
-    user.follow('53fb0fd6e4b074a0f883f08a', {
-      success: function(){
-        var query = user.followeeQuery();
-        query.find({
-          success: function(results){
-            expect(results.length).to.be(1);
-            debug(results);
-            expect(results[0].id).to.be('53fb0fd6e4b074a0f883f08a');
-            var followerQuery = LC.User.followerQuery('53fb0fd6e4b074a0f883f08a');
-            followerQuery.find().then(function(results){
-              expect(results.length).to.be(1);
-              debug(results);
-              expect(results[0].id).to.be(user.id);
-              //unfollow
-              user.unfollow('53fb0fd6e4b074a0f883f08a').then(function(){
-                //query should be emtpy
-                var query = user.followeeQuery();
-                query.find({
-                  success: function(results){
-                    expect(results.length).to.be(0);
-                    done();
-                  },
-                  error: function(err){
-                    throw err;
-                  }});
-              }, function(err){
-                throw err;
-              });
-            }, function(err){
-              throw err;
-            });
-          },
-          error: function(err){
-            throw err;
-          }
-        });
-      },
-      error: function(err) {
-        done(err);
-      }
+    it('should respond missing password', function(done) {
+      var user = new ML.User();
+      user.setUsername(username);
+      user.logIn().then(function(){
+        throw new Error('should not login');
+      }, function(err){
+        expect(err.code).to.be.equal(ML.Error.PASSWORD_MISSING);
+        done();
+      }).catch(done);
+    });
+
+    it('Login username not existed', function(done) {
+      ML.User.logIn('invalid username', password).then(function(){
+        throw new Error('should not login');
+      }, function(err){
+        expect(err.code).to.be(ML.Error.NOT_FIND_USER);
+        done();
+      }).catch(done);
+    });
+
+    it('Login password wrong', function(done) {
+      ML.User.logIn(username, 'my wrong pass').then(function(){
+        throw new Error('should not login');
+      }, function(err){
+        expect(err.code).to.be(ML.Error.PASSWORD_MISMATCH);
+        done();
+      }).catch(done);
+    });
+  });
+
+  describe('Current User', function () {
+    it('should return current user', function () {
+      var currentUser = ML.User.current();
+      expect(currentUser).to.be.ok();
+    });
+  });
+
+  describe('#Password', function(){
+    it('should change password with oldpassword be verified', function(done){
+      var user = ML.User.current();
+      var newpass = 'newpass';
+      user.updatePassword(password, newpass).then(function(result){
+        expect(result.number).to.be.equal(1);
+        done();
+      }).catch(done);
+    });
+
+    it('should change password', function(done){
+      var user = ML.User.current();
+      var newpass = 'newpass1';
+      user.set('password', newpass);
+      user.save().then(function(){
+        ML.User.logIn(username, newpass).then(function(user){
+          expect(user.authenticated()).to.be(true);
+          done();
+        }).catch(done);
+      });
+    });
+
+    it('should send reset password email', function(done){
+      ML.User.requestPasswordReset(email).then(function(result){
+        expect(result.success).to.be(true);
+        done();
+      }).catch(done);
+    });
+  });
+
+  describe('#Logout', function () {
+    //由于sdk其他测试依赖用户登录，所以跳过logout
+    it.skip('should logout current user', function () {
+      ML.User.logOut();
+      var currentUser = ML.User.current();
+      expect(currentUser).to.be(null);
     });
   });
 });
