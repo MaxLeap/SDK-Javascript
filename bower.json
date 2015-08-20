@@ -1,0 +1,29 @@
+{
+  "name": "leapcloud-jssdk.js",
+  "version": "0.5.8",
+  "homepage": "https://github.com/leapcloud/javascript-sdk",
+  "authors": [
+  ],
+  "description": "LeapCloud JavaScript SDK",
+  "main": "dist/lc.js",
+  "ignore": [
+    "demo",
+    "lib",
+    "test",
+    "tools",
+    "README.md",
+    "changelog.md",
+    "gulpfile.js",
+    "package.json",
+    "readme.txt"
+  ],
+  "moduleType": [
+    "globals"
+  ],
+  "keywords": [
+    "LeapCloud",
+    "JavaScript",
+    "SDK"
+  ],
+  "license": "MIT"
+}

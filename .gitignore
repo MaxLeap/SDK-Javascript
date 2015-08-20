@@ -1,0 +1,9 @@
+node_modules/
+package/
+dist/js-sdk-api-docs/
+*tgz
+*.tar.gz
+release.sh
+
+*.swp
+.idea/
