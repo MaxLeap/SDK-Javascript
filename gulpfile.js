@@ -5,6 +5,8 @@ getMLVersion = function() {
   return require('./lib/ml.js').ML.VERSION.replace('js', '');
 };
 
+var apiDocsDir = 'api-docs/'+getMLVersion();
+
 gulp.task('browserify', function() {
   return gulp.src('./lib/ml.js')
     .pipe($.browserify())
@@ -31,20 +33,20 @@ gulp.task('compress-scripts', ['uglify'], function() {
 });
 
 gulp.task('docs', $.shell.task([
-  'mkdir -p dist/js-sdk-api-docs',
-  'JSDOCDIR=tools/jsdoc-toolkit/ sh tools/jsdoc-toolkit/jsrun.sh -d=dist/js-sdk-api-docs -t=tools/jsdoc-toolkit/templates/jsdoc dist/ml.js'
+  'mkdir -p '+apiDocsDir,
+  'JSDOCDIR=tools/jsdoc-toolkit/ sh tools/jsdoc-toolkit/jsrun.sh -d='+apiDocsDir+' -t=tools/jsdoc-toolkit/templates/jsdoc dist/ml.js'
 ]));
 
 gulp.task('compress-docs', ['docs'], function() {
   var version = getMLVersion();
-  return gulp.src(['dist/js-sdk-api-docs/**'])
+  return gulp.src(['dist/js-sdk-api-docs/**/*'])
     .pipe($.tar('js-sdk-api-docs-' + version + '.tar'))
     .pipe($.gzip())
     .pipe(gulp.dest('dist'));
 });
 
 gulp.task('clean', function() {
-  gulp.src(['dist/'])
+  return gulp.src(['dist', apiDocsDir], {read: false})
     .pipe($.clean({force: true}));
 });
 

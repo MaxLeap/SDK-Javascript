@@ -6150,7 +6150,7 @@ module.exports = function (ML) {
 },{"1YiZ5S":15,"underscore":18}],13:[function(require,module,exports){
 'use strict';
 
-module.exports = "v0.1";
+module.exports = "v1.0.0";
 
 },{}],14:[function(require,module,exports){
 'use strict';
