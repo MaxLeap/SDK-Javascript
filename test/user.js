@@ -63,6 +63,9 @@ describe('User', function(){
       }).catch(done);
     });
 
+    //it.only('should login with wechat', function(){
+    //});
+
     it('should respond missing username', function(done) {
       var user = new ML.User();
       user.setPassword(password);

@@ -360,8 +360,6 @@ module.exports = function(ML) {
   var slice = Array.prototype.slice;
 
   /**
-   * @class
-   *
    * <p>ML.Events is a fork of Backbone's Events module, provided for your
    * convenience.</p>
    *
@@ -513,7 +511,7 @@ module.exports = function(ML) {
 /*!
  * LeapCloud JavaScript SDK
  * Built: Mon Jun 03 2013 13:45:00
- * https://leap.as
+ * https://maxleap.com
  *
  * Copyright 2015 leap.as, Inc.
  * The Leap Cloud JavaScript SDK is freely distributable under the MIT license.
@@ -2278,7 +2276,6 @@ var _ = require('underscore');
 module.exports = function(ML) {
 
   /**
-   * @class
    * A ML.Op is an atomic operation that can be applied to a field in a
    * ML.Object. For example, calling <code>object.set("foo", "bar")</code>
    * is an example of a ML.Op.Set. Calling <code>object.unset("foo")</code>
@@ -2340,7 +2337,6 @@ module.exports = function(ML) {
   });
 
   /**
-   * @class
    * A Set operation indicates that either the field was changed using
    * ML.Object.set, or it is a mutable container that was detected as being
    * changed.
@@ -2382,7 +2378,6 @@ module.exports = function(ML) {
   ML.Op._UNSET = {};
 
   /**
-   * @class
    * An Unset operation indicates that this field has been deleted from the
    * object.
    */
@@ -2409,7 +2404,6 @@ module.exports = function(ML) {
   });
 
   /**
-   * @class
    * An Increment is an atomic operation where the numeric value for the field
    * will be increased by a given amount.
    */
@@ -2463,7 +2457,6 @@ module.exports = function(ML) {
   });
 
   /**
-   * @class
    * Add is an atomic operation where the given objects will be appended to the
    * array that is stored in this field.
    */
@@ -2516,7 +2509,6 @@ module.exports = function(ML) {
   });
 
   /**
-   * @class
    * AddUnique is an atomic operation where the given items will be appended to
    * the array that is stored in this field only if they were not already
    * present in the array.
@@ -2591,7 +2583,6 @@ module.exports = function(ML) {
   });
 
   /**
-   * @class
    * Remove is an atomic operation where the given objects will be removed from
    * the array that is stored in this field.
    */
@@ -2653,7 +2644,6 @@ module.exports = function(ML) {
   });
 
   /**
-   * @class
    * A Relation operation indicates that the field is an instance of
    * ML.Relation, and objects are being added to, or removed from, that
    * relation.
@@ -6172,7 +6162,6 @@ module.exports = function(ML) {
   /**
    * Creating a ML.View creates its initial element outside of the DOM,
    * if an existing element is not provided...
-   * @class
    *
    * <p>A fork of Backbone.View, provided for your convenience.  If you use this
    * class, you must also include jQuery, or another library that provides a
