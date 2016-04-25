@@ -31,7 +31,9 @@ module.exports = function (ML) {
       osVersion: '1.0',
       resolution: '1024*768',
       language: 'en',
-      national: '0,0'
+      national: '0,0',
+      ctimestamp: new Date().getTime(),
+      deviceModel: '0,0'
     }, options);
     if(ML.analyticsEnable){
       !!ML.localStorage.getItem('installation') && ML.localStorage.setItem('installation', installation);
@@ -61,6 +63,60 @@ module.exports = function (ML) {
       };
       return ML.Analytics._request(data);
     },
+    trackUserlogin: function(data){
+      var data = {
+        TimeLineEvent: [
+          _.extend({}, this.options, {
+            eventId: data.eventId,
+            eventName: data.eventName,
+            eventNickName: data.eventNickName,
+            eventType: 1
+          })
+        ]
+      };
+      return ML.Analytics._request(data);
+    },
+    trackUserRegister: function(data){
+      var data = {
+        TimeLineEvent: [
+          _.extend({}, this.options, {
+            eventId: data.eventId,
+            eventName: data.eventName,
+            eventNickName: data.eventNickName,
+            eventType: 0
+          })
+        ]
+      };
+      return ML.Analytics._request(data);
+    },
+    trackUserLogout: function(data){
+      var data = {
+        TimeLineEvent: [
+          _.extend({}, this.options, {
+            eventId: data.eventId,
+            eventName: data.eventName,
+            eventNickName: data.eventNickName,
+            eventType: 2
+          })
+        ]
+      };
+      return ML.Analytics._request(data);
+    },
+
+    trackSessionStart: function(data){
+      var data = {
+        TimeLineEvent: [
+          _.extend({}, this.options, {
+            eventId: data.eventId,
+            eventName: data.eventName,
+            eventNickName: data.eventNickName,
+            eventType: 3
+          })
+        ]
+      };
+      return ML.Analytics._request(data);
+    },
+
     _trackSessionBegin: function(){
       var data = {
         Session: [
