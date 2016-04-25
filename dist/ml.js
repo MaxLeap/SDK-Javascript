@@ -3,6 +3,52 @@
 
 var _ = require('underscore');
 
+module.exports = function (ML) {
+  ML.Analytics = function(options){
+    var installation = uuid.v1();
+    var UNKNOWN = '0,0';
+    var REFERRER_START = '8cf1f64d97224f6eba3867b57822f528';
+
+    this.options = _.extend({
+      sdkVersion: ML.VERSION,
+      uuid: installation,
+      sessionId: installation,
+      deviceId: installation,
+      appUserId: installation,
+      channel: UNKNOWN,
+      network: UNKNOWN,
+      carrier: UNKNOWN,
+      userCreateTime: new Date().getTime(),
+      startTime: new Date().getTime(),
+      duration: 0,
+      push: false,
+      upgrade: false,
+      url: window.location.href,
+      referer: document.referrer || REFERRER_START,
+      userAgent: window.navigator.userAgent,
+
+      os: 'ios',
+      osVersion: '1.0',
+      resolution: '1024*768',
+      language: 'en'
+    }, options)
+  };
+
+  _.extend(ML.Analytics.prototype, {
+    trackPageBegin: function(){
+      var data = {
+        PageView: [this.options]
+      };
+      ML._request('analytics/at', null, null, 'POST', data);
+
+    }
+  })
+};
+},{"underscore":19}],2:[function(require,module,exports){
+'use strict';
+
+var _ = require('underscore');
+
 module.exports = function(ML) {
 
   /**
@@ -353,7 +399,7 @@ module.exports = function(ML) {
 
 };
 
-},{"underscore":18}],2:[function(require,module,exports){
+},{"underscore":19}],3:[function(require,module,exports){
 /*global _: false */
 module.exports = function(ML) {
   var eventSplitter = /\s+/;
@@ -506,7 +552,7 @@ module.exports = function(ML) {
   ML.Events.unbind = ML.Events.off;
 };
 
-},{}],3:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 (function (global){
 /*!
  * LeapCloud JavaScript SDK
@@ -533,6 +579,7 @@ ML.useENServer = function(){
   ML.serverURL = 'https://api.maxleap.com/';
 };
 
+ML.useENServer();
 
 // The module order is important.
 require('./utils')(ML);
@@ -546,11 +593,12 @@ require('./object')(ML);
 require('./view')(ML);
 require('./user')(ML);
 require('./query')(ML);
+require('./analytics')(ML);
 
 ML.ML = ML;
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./error":1,"./event":2,"./file":4,"./geopoint":5,"./object":6,"./op":7,"./promise":8,"./query":9,"./relation":10,"./user":11,"./utils":12,"./version":13,"./view":14,"localStorage":16,"node-uuid":17,"underscore":18}],4:[function(require,module,exports){
+},{"./analytics":1,"./error":2,"./event":3,"./file":5,"./geopoint":6,"./object":7,"./op":8,"./promise":9,"./query":10,"./relation":11,"./user":12,"./utils":13,"./version":14,"./view":15,"localStorage":17,"node-uuid":18,"underscore":19}],5:[function(require,module,exports){
 'use strict';
 var _ = require('underscore');
 module.exports = function () {
@@ -616,7 +664,7 @@ module.exports = function () {
   });
 
 };
-},{"underscore":18}],5:[function(require,module,exports){
+},{"underscore":19}],6:[function(require,module,exports){
 var _ = require('underscore');
 
 /*global navigator: false */
@@ -790,7 +838,7 @@ module.exports = function(ML) {
   };
 };
 
-},{"underscore":18}],6:[function(require,module,exports){
+},{"underscore":19}],7:[function(require,module,exports){
 'use strict';
 
 var _ = require('underscore');
@@ -2269,7 +2317,7 @@ module.exports = function (ML) {
 
 };
 
-},{"underscore":18}],7:[function(require,module,exports){
+},{"underscore":19}],8:[function(require,module,exports){
 'use strict';
 var _ = require('underscore');
 
@@ -2793,7 +2841,7 @@ module.exports = function(ML) {
 
 };
 
-},{"underscore":18}],8:[function(require,module,exports){
+},{"underscore":19}],9:[function(require,module,exports){
 (function (process){
 'use strict';
 var _ = require('underscore');
@@ -3388,7 +3436,7 @@ Promise.prototype.finally = Promise.prototype.always;
 Promise.prototype.try = Promise.prototype.done;
 
 }).call(this,require("1YiZ5S"))
-},{"1YiZ5S":15,"underscore":18}],9:[function(require,module,exports){
+},{"1YiZ5S":16,"underscore":19}],10:[function(require,module,exports){
 'use strict';
 
 var _ = require('underscore');
@@ -4323,7 +4371,7 @@ module.exports = function(ML) {
    });
 };
 
-},{"underscore":18}],10:[function(require,module,exports){
+},{"underscore":19}],11:[function(require,module,exports){
 'use strict';
 var _ = require('underscore');
 
@@ -4440,7 +4488,7 @@ module.exports = function(ML) {
   };
 };
 
-},{"underscore":18}],11:[function(require,module,exports){
+},{"underscore":19}],12:[function(require,module,exports){
 'use strict';
 
 var _ = require('underscore');
@@ -5455,7 +5503,7 @@ module.exports = function(ML) {
   });
 };
 
-},{"underscore":18}],12:[function(require,module,exports){
+},{"underscore":19}],13:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -5780,8 +5828,8 @@ module.exports = function (ML) {
       }
     };
     xhr.open(method, url, true);
-    xhr.setRequestHeader("X-ZCloud-AppId", ML.applicationId);
-    xhr.setRequestHeader("X-ZCloud-APIKey", ML.applicationKey);
+    xhr.setRequestHeader("X-ML-AppId", ML.applicationId);
+    xhr.setRequestHeader("X-ML-APIKey", ML.applicationKey);
     for (var key in headers) {
       xhr.setRequestHeader(key, headers[key]);
     }
@@ -5839,11 +5887,11 @@ module.exports = function (ML) {
       route !== "verifyMobilePhone" &&
       route !== "requestSmsCode" &&
       route !== "verifySmsCode" &&
+      route !== "analytics/at" &&
       route !== "users" &&
       route !== 'updatePassword' &&
       route !== "usersByMobilePhone" &&
       route !== "cloudQuery" &&
-      route !== "qiniu" &&
       route !== "statuses" &&
       route !== "bigquery" &&
       route !== 'search/select' &&
@@ -5874,7 +5922,7 @@ module.exports = function (ML) {
     var data = dataObject;
     var currentUser = ML.User.current();
     if (currentUser && currentUser._sessionToken) {
-      headers['X-ZCloud-Session-Token'] = currentUser._sessionToken;
+      headers['X-ML-Session-Token'] = currentUser._sessionToken;
     }
 
     if(!(data instanceof File)){
@@ -6147,12 +6195,12 @@ module.exports = function (ML) {
 };
 
 }).call(this,require("1YiZ5S"))
-},{"1YiZ5S":15,"underscore":18}],13:[function(require,module,exports){
+},{"1YiZ5S":16,"underscore":19}],14:[function(require,module,exports){
 'use strict';
 
 module.exports = "v1.0.0";
 
-},{}],14:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 'use strict';
 
 var _ = require('underscore');
@@ -6360,7 +6408,7 @@ module.exports = function(ML) {
 
 };
 
-},{"underscore":18}],15:[function(require,module,exports){
+},{"underscore":19}],16:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -6425,7 +6473,7 @@ process.chdir = function (dir) {
     throw new Error('process.chdir is not supported');
 };
 
-},{}],16:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 (function (global){
 // http://www.rajdeepd.com/articles/chrome/localstrg/LocalStorageSample.htm
 
@@ -6483,7 +6531,7 @@ process.chdir = function (dir) {
 }());
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],17:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 //     uuid.js
 //
 //     Copyright (c) 2010-2012 Robert Kieffer
@@ -6732,7 +6780,7 @@ process.chdir = function (dir) {
   }
 }).call(this);
 
-},{}],18:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 //     Underscore.js 1.8.3
 //     http://underscorejs.org
 //     (c) 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
@@ -8282,4 +8330,4 @@ process.chdir = function (dir) {
   }
 }.call(this));
 
-},{}]},{},[3])
+},{}]},{},[4])
