@@ -841,7 +841,7 @@ ML.useENServer = function(){
   ML.serverURL = 'https://api.maxleap.com/';
 };
 
-ML.useENServer();
+ML.useCNServer();
 
 ML.analyticsEnable = true;
 
@@ -5845,9 +5845,6 @@ module.exports = function (ML) {
 
     return child;
   };
-
-  // Set the server for ML to talk to.
-  ML.serverURL = "https://api.leap.as";
 
   // Check whether we are running in Node.js.
   if (typeof(process) !== "undefined" &&
