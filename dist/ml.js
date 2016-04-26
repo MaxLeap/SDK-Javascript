@@ -16,33 +16,30 @@ module.exports = function (ML) {
       uuid: UUID,
       sessionId: UUID,
       deviceId: UUID,
-      channel: UNKNOWN,
-      network: UNKNOWN,
-      carrier: UNKNOWN,
-      userCreateTime: new Date().getTime(),
-      startTime: new Date().getTime(),
       duration: 0,
       push: false,
       upgrade: false,
       url: window.location.href,
       referer: document.referrer || REFERRER_START,
       userAgent: window.navigator.userAgent,
-
       os: detect.getOSName(),
       osVersion: detect.getOSVersion(),
       resolution: detect.getResolution(),
       language: detect.getLanguage(),
+      userCreateTime: new Date().getTime(),
+      startTime: new Date().getTime(),
       ctimestamp: new Date().getTime(),
-      national: '0,0',
-      deviceModel: '0,0'
+      channel: UNKNOWN,
+      network: UNKNOWN,
+      carrier: UNKNOWN,
+      national: UNKNOWN,
+      deviceModel: UNKNOWN
     }, options);
     if(ML.analyticsEnable){
       !!ML.localStorage.getItem('installation') && ML.localStorage.setItem('installation', installation);
       this.trackPageBegin();
       this._trackNewUser();
     }
-
-
   };
 
   _.extend(ML.Analytics.prototype, {
@@ -139,10 +136,17 @@ module.exports = function (ML) {
   });
 
   _.extend(ML.Analytics, {
-    _request: function(data){
+    _request: function(data, i){
       return ML._ajax('POST', ML.serverURL + '2.0/analytics/at', JSON.stringify(data), null, null, {
         'Content-Type': 'application/json'
-      })
+      }).then(function(res){
+        return res;
+      }, function(res){
+        i = i || 0;
+        if(i < 2){
+          ML.Analytics._request(data, ++i);
+        }
+      });
     }
   })
 };
@@ -6015,8 +6019,10 @@ module.exports = function (ML) {
             //对于一些请求(如delete files)，服务器不返回response，只能通过xhr.status判断请求结果
             promise.resolve(xhr.status);
           }
-          if (response) {
+          if (response && !response.errorCode) {
             promise.resolve(response, xhr.status, xhr);
+          }else{
+            promise.reject(xhr);
           }
         } else {
           promise.reject(xhr);
