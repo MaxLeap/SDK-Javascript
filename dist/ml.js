@@ -9,6 +9,7 @@ module.exports = function (ML) {
     var UUID = uuid.v1();
     var UNKNOWN = '0,0';
     var REFERRER_START = '8cf1f64d97224f6eba3867b57822f528';
+    var detect = new ML.Detect();
     this.options = _.extend({
       sdkVersion: ML.VERSION,
       appUserId: installation,
@@ -27,12 +28,12 @@ module.exports = function (ML) {
       referer: document.referrer || REFERRER_START,
       userAgent: window.navigator.userAgent,
 
-      os: 'ios',//todo
-      osVersion: '1.0',
-      resolution: '1024*768',
-      language: 'en',
-      national: '0,0',
+      os: detect.getOSName(),
+      osVersion: detect.getOSVersion(),
+      resolution: detect.getResolution(),
+      language: detect.getLanguage(),
       ctimestamp: new Date().getTime(),
+      national: '0,0',
       deviceModel: '0,0'
     }, options);
     if(ML.analyticsEnable){
@@ -40,6 +41,8 @@ module.exports = function (ML) {
       this.trackPageBegin();
       this._trackNewUser();
     }
+
+
   };
 
   _.extend(ML.Analytics.prototype, {
@@ -143,7 +146,98 @@ module.exports = function (ML) {
     }
   })
 };
-},{"underscore":19}],2:[function(require,module,exports){
+},{"underscore":20}],2:[function(require,module,exports){
+'use strict';
+
+var _ = require('underscore');
+
+module.exports = function(ML){
+
+  ML.Detect = function(){
+    var module = {
+      options: [],
+      header: [navigator.platform, navigator.userAgent, navigator.appVersion, navigator.vendor, window.opera],
+      dataos: [
+        { name: 'Windows Phone', value: 'Windows Phone', version: 'OS' },
+        { name: 'Windows', value: 'Win', version: 'NT' },
+        { name: 'iPhone', value: 'iPhone', version: 'OS' },
+        { name: 'iPad', value: 'iPad', version: 'OS' },
+        { name: 'Kindle', value: 'Silk', version: 'Silk' },
+        { name: 'Android', value: 'Android', version: 'Android' },
+        { name: 'PlayBook', value: 'PlayBook', version: 'OS' },
+        { name: 'BlackBerry', value: 'BlackBerry', version: '/' },
+        { name: 'Macintosh', value: 'Mac', version: 'OS X' },
+        { name: 'Linux', value: 'Linux', version: 'rv' },
+        { name: 'Palm', value: 'Palm', version: 'PalmOS' }
+      ],
+      databrowser: [
+        { name: 'Chrome', value: 'Chrome', version: 'Chrome' },
+        { name: 'Firefox', value: 'Firefox', version: 'Firefox' },
+        { name: 'Safari', value: 'Safari', version: 'Version' },
+        { name: 'Internet Explorer', value: 'MSIE', version: 'MSIE' },
+        { name: 'Opera', value: 'Opera', version: 'Opera' },
+        { name: 'BlackBerry', value: 'CLDC', version: 'CLDC' },
+        { name: 'Mozilla', value: 'Mozilla', version: 'Mozilla' }
+      ],
+      init: function () {
+        var agent = this.header.join(' '),
+          os = this.matchItem(agent, this.dataos),
+          browser = this.matchItem(agent, this.databrowser);
+
+        return { os: os, browser: browser };
+      },
+      matchItem: function (string, data) {
+        var i = 0,
+          j = 0,
+          html = '',
+          regex,
+          regexv,
+          match,
+          matches,
+          version;
+
+        for (i = 0; i < data.length; i += 1) {
+          regex = new RegExp(data[i].value, 'i');
+          match = regex.test(string);
+          if (match) {
+            regexv = new RegExp(data[i].version + '[- /:;]([\\d._]+)', 'i');
+            matches = string.match(regexv);
+            version = '';
+            if (matches) { if (matches[1]) { matches = matches[1]; } }
+            if (matches) {
+              version = matches.replace(/_/g, '.');
+            } else {
+              version = '0';
+            }
+            return {
+              name: data[i].value,
+              version: version
+            };
+          }
+        }
+        return { name: 'unknown', version: 0 };
+      }
+    };
+    this.module = module.init();
+  };
+
+  _.extend(ML.Detect.prototype, {
+    getOSName: function(){
+      return this.module.os.name
+    },
+    getOSVersion: function(){
+      return this.module.os.version
+    },
+    getResolution: function(){
+      return screen.width + '*' + screen.height
+    },
+    getLanguage: function(){
+      return (navigator.language || navigator.userLanguage).match(/\w+(?=-)/)[0];
+    }
+  });
+
+};
+},{"underscore":20}],3:[function(require,module,exports){
 'use strict';
 
 var _ = require('underscore');
@@ -498,7 +592,7 @@ module.exports = function(ML) {
 
 };
 
-},{"underscore":19}],3:[function(require,module,exports){
+},{"underscore":20}],4:[function(require,module,exports){
 /*global _: false */
 module.exports = function(ML) {
   var eventSplitter = /\s+/;
@@ -651,7 +745,7 @@ module.exports = function(ML) {
   ML.Events.unbind = ML.Events.off;
 };
 
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 (function (global){
 /*!
  * LeapCloud JavaScript SDK
@@ -683,6 +777,7 @@ ML.useENServer();
 ML.analyticsEnable = true;
 
 // The module order is important.
+require('./detect')(ML);
 require('./utils')(ML);
 require('./error')(ML);
 require('./event')(ML);
@@ -699,7 +794,7 @@ require('./analytics')(ML);
 ML.ML = ML;
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./analytics":1,"./error":2,"./event":3,"./file":5,"./geopoint":6,"./object":7,"./op":8,"./promise":9,"./query":10,"./relation":11,"./user":12,"./utils":13,"./version":14,"./view":15,"localStorage":17,"node-uuid":18,"underscore":19}],5:[function(require,module,exports){
+},{"./analytics":1,"./detect":2,"./error":3,"./event":4,"./file":6,"./geopoint":7,"./object":8,"./op":9,"./promise":10,"./query":11,"./relation":12,"./user":13,"./utils":14,"./version":15,"./view":16,"localStorage":18,"node-uuid":19,"underscore":20}],6:[function(require,module,exports){
 'use strict';
 var _ = require('underscore');
 module.exports = function () {
@@ -765,7 +860,7 @@ module.exports = function () {
   });
 
 };
-},{"underscore":19}],6:[function(require,module,exports){
+},{"underscore":20}],7:[function(require,module,exports){
 var _ = require('underscore');
 
 /*global navigator: false */
@@ -939,7 +1034,7 @@ module.exports = function(ML) {
   };
 };
 
-},{"underscore":19}],7:[function(require,module,exports){
+},{"underscore":20}],8:[function(require,module,exports){
 'use strict';
 
 var _ = require('underscore');
@@ -2418,7 +2513,7 @@ module.exports = function (ML) {
 
 };
 
-},{"underscore":19}],8:[function(require,module,exports){
+},{"underscore":20}],9:[function(require,module,exports){
 'use strict';
 var _ = require('underscore');
 
@@ -2942,7 +3037,7 @@ module.exports = function(ML) {
 
 };
 
-},{"underscore":19}],9:[function(require,module,exports){
+},{"underscore":20}],10:[function(require,module,exports){
 (function (process){
 'use strict';
 var _ = require('underscore');
@@ -3537,7 +3632,7 @@ Promise.prototype.finally = Promise.prototype.always;
 Promise.prototype.try = Promise.prototype.done;
 
 }).call(this,require("1YiZ5S"))
-},{"1YiZ5S":16,"underscore":19}],10:[function(require,module,exports){
+},{"1YiZ5S":17,"underscore":20}],11:[function(require,module,exports){
 'use strict';
 
 var _ = require('underscore');
@@ -4472,7 +4567,7 @@ module.exports = function(ML) {
    });
 };
 
-},{"underscore":19}],11:[function(require,module,exports){
+},{"underscore":20}],12:[function(require,module,exports){
 'use strict';
 var _ = require('underscore');
 
@@ -4589,7 +4684,7 @@ module.exports = function(ML) {
   };
 };
 
-},{"underscore":19}],12:[function(require,module,exports){
+},{"underscore":20}],13:[function(require,module,exports){
 'use strict';
 
 var _ = require('underscore');
@@ -5604,7 +5699,7 @@ module.exports = function(ML) {
   });
 };
 
-},{"underscore":19}],13:[function(require,module,exports){
+},{"underscore":20}],14:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -6295,12 +6390,12 @@ module.exports = function (ML) {
 };
 
 }).call(this,require("1YiZ5S"))
-},{"1YiZ5S":16,"underscore":19}],14:[function(require,module,exports){
+},{"1YiZ5S":17,"underscore":20}],15:[function(require,module,exports){
 'use strict';
 
 module.exports = "v1.0.0";
 
-},{}],15:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 'use strict';
 
 var _ = require('underscore');
@@ -6508,7 +6603,7 @@ module.exports = function(ML) {
 
 };
 
-},{"underscore":19}],16:[function(require,module,exports){
+},{"underscore":20}],17:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -6573,7 +6668,7 @@ process.chdir = function (dir) {
     throw new Error('process.chdir is not supported');
 };
 
-},{}],17:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 (function (global){
 // http://www.rajdeepd.com/articles/chrome/localstrg/LocalStorageSample.htm
 
@@ -6631,7 +6726,7 @@ process.chdir = function (dir) {
 }());
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],18:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 //     uuid.js
 //
 //     Copyright (c) 2010-2012 Robert Kieffer
@@ -6880,7 +6975,7 @@ process.chdir = function (dir) {
   }
 }).call(this);
 
-},{}],19:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 //     Underscore.js 1.8.3
 //     http://underscorejs.org
 //     (c) 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
@@ -8430,4 +8525,4 @@ process.chdir = function (dir) {
   }
 }.call(this));
 
-},{}]},{},[4])
+},{}]},{},[5])
