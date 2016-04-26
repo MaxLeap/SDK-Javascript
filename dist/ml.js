@@ -6092,8 +6092,11 @@ module.exports = function (ML) {
       }
     };
     xhr.open(method, url, true);
-    xhr.setRequestHeader("X-ML-AppId", ML.applicationId);
-    xhr.setRequestHeader("X-ML-APIKey", ML.applicationKey);
+    if(!url.match('analytics/at')){
+      xhr.setRequestHeader("X-ML-AppId", ML.applicationId);
+      xhr.setRequestHeader("X-ML-APIKey", ML.applicationKey);
+    }
+    
     for (var key in headers) {
       xhr.setRequestHeader(key, headers[key]);
     }
