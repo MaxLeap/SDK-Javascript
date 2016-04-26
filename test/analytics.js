@@ -95,7 +95,7 @@ describe('Analytics', function () {
         userId: '571d7d23a5ff7f0001a4f888',
         appVersion: '1.0'
       };
-      ML.analyticsEnable = false;
+      // ML.analyticsEnable = false;
       var analytics = new ML.Analytics(options);
       var data = {
         eventId: 'sessionstartid',

@@ -1,15 +1,23 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
-
 var _ = require('underscore');
-
 module.exports = function (ML) {
+  /**
+   * ML.Analytics collects data of user actions and analytics it in MaxLeap.
+   * @param {Object} options The initial configuration
+   * @constructor
+   */
   ML.Analytics = function(options){
-    var installation = uuid.v1();
     var UUID = uuid.v1();
     var UNKNOWN = '0,0';
     var REFERRER_START = '8cf1f64d97224f6eba3867b57822f528';
     var detect = new ML.Detect();
+
+    var installation = ML.localStorage.getItem('installation');
+    if(!installation){
+      installation = uuid.v1();
+    }
+
     this.options = _.extend({
       sdkVersion: ML.VERSION,
       appUserId: installation,
@@ -35,14 +43,25 @@ module.exports = function (ML) {
       national: UNKNOWN,
       deviceModel: UNKNOWN
     }, options);
+
+    //Track data automatically when ML.analyticsEnable is true.
     if(ML.analyticsEnable){
-      !!ML.localStorage.getItem('installation') && ML.localStorage.setItem('installation', installation);
       this.trackPageBegin();
-      this._trackNewUser();
+      //Track new user only one time.
+      if(!ML.localStorage.getItem('installation')){
+        this._trackNewUser();
+      }
+    }
+    if(!ML.localStorage.getItem('installation')){
+      ML.localStorage.setItem('installation', installation);
     }
   };
 
-  _.extend(ML.Analytics.prototype, {
+  _.extend(ML.Analytics.prototype, /** @lends ML.Analytics.prototype */{
+    /**
+     * Track data when an user open a page.
+     * @returns {Promise}
+     */
     trackPageBegin: function(){
       var data = {
         PageView: [
@@ -52,6 +71,12 @@ module.exports = function (ML) {
       this._trackSessionBegin();
       return ML.Analytics._request(data);
     },
+    /**
+     * Track custom event.
+     * @param {String} eventId
+     * @param {Object} attrs
+     * @returns {Promise}
+     */
     trackEvent: function(eventId, attrs){
       var data = {
         Event: [
@@ -63,6 +88,12 @@ module.exports = function (ML) {
       };
       return ML.Analytics._request(data);
     },
+
+    /**
+     * Track data when an user login.
+     * @param {Object} data
+     * @returns {Promise}
+     */
     trackUserlogin: function(data){
       var data = {
         TimeLineEvent: [
@@ -76,6 +107,12 @@ module.exports = function (ML) {
       };
       return ML.Analytics._request(data);
     },
+
+    /**
+     * Track data when an user register.
+     * @param {Object} data
+     * @returns {Promise}
+     */
     trackUserRegister: function(data){
       var data = {
         TimeLineEvent: [
@@ -89,6 +126,12 @@ module.exports = function (ML) {
       };
       return ML.Analytics._request(data);
     },
+
+    /**
+     * Track data when an user logout.
+     * @param {Object} data
+     * @returns {Promise}
+     */
     trackUserLogout: function(data){
       var data = {
         TimeLineEvent: [
@@ -103,6 +146,11 @@ module.exports = function (ML) {
       return ML.Analytics._request(data);
     },
 
+    /**
+     * Track data when an user open a page.
+     * @param {Object} data
+     * @returns {Promise}
+     */
     trackSessionStart: function(data){
       var data = {
         TimeLineEvent: [
@@ -117,6 +165,10 @@ module.exports = function (ML) {
       return ML.Analytics._request(data);
     },
 
+    /**
+     * Track data when an user open a page.
+     * @returns {Promise}
+     */
     _trackSessionBegin: function(){
       var data = {
         Session: [
@@ -125,6 +177,11 @@ module.exports = function (ML) {
       };
       return ML.Analytics._request(data);
     },
+
+    /**
+     * Track data when an user open a website first time.
+     * @returns {Promise}
+     */
     _trackNewUser: function(){
       var data = {
         NewUser: [
@@ -135,7 +192,14 @@ module.exports = function (ML) {
     }
   });
 
-  _.extend(ML.Analytics, {
+  _.extend(ML.Analytics, /** @lends ML.Analytics */{
+    /**
+     * Post data to server, and retry when fail.
+     * @param {Object} data
+     * @param {i} i
+     * @returns {Promise}
+     * @private
+     */
     _request: function(data, i){
       return ML._ajax('POST', ML.serverURL + '2.0/analytics/at', JSON.stringify(data), null, null, {
         'Content-Type': 'application/json'
@@ -146,6 +210,7 @@ module.exports = function (ML) {
         if(i < 2){
           ML.Analytics._request(data, ++i);
         }
+        return res;
       });
     }
   })
