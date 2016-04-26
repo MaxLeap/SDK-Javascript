@@ -73,8 +73,8 @@ module.exports = function (ML) {
     },
     /**
      * Track custom event.
-     * @param {String} eventId
-     * @param {Object} attrs
+     * @param {String} eventId Id of the custom event.
+     * @param {Object} attrs Key-value map of the custom event.
      * @returns {Promise}
      */
     trackEvent: function(eventId, attrs){
@@ -91,7 +91,7 @@ module.exports = function (ML) {
 
     /**
      * Track data when an user login.
-     * @param {Object} data
+     * @param {Object} data Event data of user login.
      * @returns {Promise}
      */
     trackUserlogin: function(data){
@@ -110,7 +110,7 @@ module.exports = function (ML) {
 
     /**
      * Track data when an user register.
-     * @param {Object} data
+     * @param {Object} Event data of user register.
      * @returns {Promise}
      */
     trackUserRegister: function(data){
@@ -129,7 +129,7 @@ module.exports = function (ML) {
 
     /**
      * Track data when an user logout.
-     * @param {Object} data
+     * @param {Object} Event data of user logout.
      * @returns {Promise}
      */
     trackUserLogout: function(data){
@@ -148,7 +148,7 @@ module.exports = function (ML) {
 
     /**
      * Track data when an user open a page.
-     * @param {Object} data
+     * @param {Object} Event data of session start.
      * @returns {Promise}
      */
     trackSessionStart: function(data){
@@ -196,7 +196,7 @@ module.exports = function (ML) {
     /**
      * Post data to server, and retry when fail.
      * @param {Object} data
-     * @param {i} i
+     * @param {i} i Retry time, by default undefined.
      * @returns {Promise}
      * @private
      */
@@ -6464,7 +6464,7 @@ module.exports = function (ML) {
 },{"1YiZ5S":17,"underscore":20}],15:[function(require,module,exports){
 'use strict';
 
-module.exports = "v1.0.0";
+module.exports = "v2.0.0";
 
 },{}],16:[function(require,module,exports){
 'use strict';
