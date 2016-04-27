@@ -6,3 +6,4 @@ tools/
 demo/
 lib/cloud.js
 *.sh
+.idea/
