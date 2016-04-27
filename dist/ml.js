@@ -6464,7 +6464,7 @@ module.exports = function (ML) {
 },{"1YiZ5S":17,"underscore":20}],15:[function(require,module,exports){
 'use strict';
 
-module.exports = "v2.0.0";
+module.exports = "v2.0.2";
 
 },{}],16:[function(require,module,exports){
 'use strict';
