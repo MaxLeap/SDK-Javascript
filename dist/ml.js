@@ -44,14 +44,12 @@ module.exports = function (ML) {
       deviceModel: UNKNOWN
     }, options);
 
-    //Track data automatically when ML.analyticsEnable is true.
-    if(ML.analyticsEnable){
-      this.trackPageBegin();
-      //Track new user only one time.
-      if(!ML.localStorage.getItem('installation')){
-        this._trackNewUser();
-      }
+    this.trackPageBegin();
+    //Track new user only one time.
+    if(!ML.localStorage.getItem('installation')){
+      this._trackNewUser();
     }
+    
     if(!ML.localStorage.getItem('installation')){
       ML.localStorage.setItem('installation', installation);
     }
@@ -201,6 +199,9 @@ module.exports = function (ML) {
      * @private
      */
     _request: function(data, i){
+      if(!ML.analyticsEnable){
+        return;
+      }
       return ML._ajax('POST', ML.serverURL + '2.0/analytics/at', JSON.stringify(data), null, null, {
         'Content-Type': 'application/json'
       }).then(function(res){
