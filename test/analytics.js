@@ -14,7 +14,7 @@ describe('Analytics', function () {
     })
   });
 
-  describe('#Event', function(){
+  describe('#CustomEvent', function(){
     it('should track event', function(done){
       var options = {
         appId: '56273907169e7d0001bd5c92',
