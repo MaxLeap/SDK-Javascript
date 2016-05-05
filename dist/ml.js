@@ -11,7 +11,7 @@ module.exports = function (ML) {
     var UUID = uuid.v1();
     var UNKNOWN = '0,0';
     var REFERRER_START = '8cf1f64d97224f6eba3867b57822f528';
-    var detect = new ML.Detect();
+    var detector = new ML.Detector();
 
     var installation = ML.store.get('installation');
     if(!installation){
@@ -29,17 +29,18 @@ module.exports = function (ML) {
       url: window.location.href,
       referer: document.referrer || REFERRER_START,
       userAgent: window.navigator.userAgent,
-      os: detect.getOSName(),
-      osVersion: detect.getOSVersion(),
-      resolution: detect.getResolution(),
-      language: detect.getLanguage(),
+      os: detector.getOSName(),
+      osVersion: detector.getOSVersion(),
+      resolution: detector.getResolution(),
+      language: detector.getLanguage(),
       userCreateTime: new Date().getTime(),
       startTime: new Date().getTime(),
       ctimestamp: new Date().getTime(),
       channel: UNKNOWN,
       network: UNKNOWN,
       carrier: UNKNOWN,
-      national: UNKNOWN
+      national: UNKNOWN,
+      deviceModel: UNKNOWN
     }, options);
 
     this.trackPageBegin();
@@ -221,11 +222,11 @@ var _ = require('underscore');
 
 module.exports = function (ML) {
 
-  ML.Detect = function () {
+  ML.Detector = function () {
     this.detector = require('web-detector');
   };
 
-  _.extend(ML.Detect.prototype, {
+  _.extend(ML.Detector.prototype, {
     getOSName: function () {
       return this.detector.os.name === 'na' ? 'unknown' : this.detector.os.name;
     },
@@ -799,7 +800,7 @@ ML.useCNServer();
 ML.analyticsEnable = true;
 
 // The module order is important.
-require('./detect')(ML);
+require('./detector')(ML);
 require('./utils')(ML);
 require('./error')(ML);
 require('./event')(ML);
@@ -816,7 +817,7 @@ require('./analytics')(ML);
 ML.ML = ML;
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./analytics":1,"./detect":2,"./error":3,"./event":4,"./file":6,"./geopoint":7,"./object":8,"./op":9,"./promise":10,"./query":11,"./relation":12,"./store":13,"./user":14,"./utils":15,"./version":16,"./view":17,"node-uuid":19,"underscore":21}],6:[function(require,module,exports){
+},{"./analytics":1,"./detector":2,"./error":3,"./event":4,"./file":6,"./geopoint":7,"./object":8,"./op":9,"./promise":10,"./query":11,"./relation":12,"./store":13,"./user":14,"./utils":15,"./version":16,"./view":17,"node-uuid":19,"underscore":21}],6:[function(require,module,exports){
 'use strict';
 var _ = require('underscore');
 module.exports = function () {

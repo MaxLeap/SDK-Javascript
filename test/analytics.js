@@ -2,8 +2,8 @@ describe('Analytics', function () {
   describe('#PageView', function(){
     it('should track page begin', function(done){
       var options = {
-        appId: '56273907169e7d0001bd5c92',
-        userId: '571d7d23a5ff7f0001a4f888',
+        appId: '572afb8a667a230001e5642a',
+        userId: '572aaf3c70c6760001495048',
         appVersion: '1.0'
       };
       var analytics = new ML.Analytics(options);
@@ -17,8 +17,8 @@ describe('Analytics', function () {
   describe('#CustomEvent', function(){
     it('should track event', function(done){
       var options = {
-        appId: '56273907169e7d0001bd5c92',
-        userId: '571d7d23a5ff7f0001a4f888',
+        appId: '572afb8a667a230001e5642a',
+        userId: '572aaf3c70c6760001495048',
         appVersion: '1.0'
       };
       var analytics = new ML.Analytics(options);
@@ -33,8 +33,8 @@ describe('Analytics', function () {
   describe('#TimelineEvent', function(){
     it('should track login event', function(done){
       var options = {
-        appId: '56273907169e7d0001bd5c92',
-        userId: '571d7d23a5ff7f0001a4f888',
+        appId: '572afb8a667a230001e5642a',
+        userId: '572aaf3c70c6760001495048',
         appVersion: '1.0'
       };
       var analytics = new ML.Analytics(options);
@@ -51,8 +51,8 @@ describe('Analytics', function () {
 
     it('should track register event', function(done){
       var options = {
-        appId: '56273907169e7d0001bd5c92',
-        userId: '571d7d23a5ff7f0001a4f888',
+        appId: '572afb8a667a230001e5642a',
+        userId: '572aaf3c70c6760001495048',
         appVersion: '1.0'
       };
       var analytics = new ML.Analytics(options);
@@ -69,8 +69,8 @@ describe('Analytics', function () {
 
     it('should track logout event', function(done){
       var options = {
-        appId: '56273907169e7d0001bd5c92',
-        userId: '571d7d23a5ff7f0001a4f888',
+        appId: '572afb8a667a230001e5642a',
+        userId: '572aaf3c70c6760001495048',
         appVersion: '1.0'
       };
       var analytics = new ML.Analytics(options);
@@ -87,8 +87,8 @@ describe('Analytics', function () {
 
     it('should track session start event', function(done){
       var options = {
-        appId: '56273907169e7d0001bd5c92',
-        userId: '571d7d23a5ff7f0001a4f888',
+        appId: '572afb8a667a230001e5642a',
+        userId: '572aaf3c70c6760001495048',
         appVersion: '1.0'
       };
       var analytics = new ML.Analytics(options);
