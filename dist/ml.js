@@ -17,7 +17,6 @@ module.exports = function (ML) {
     if(!installation){
       installation = uuid.v1();
     }
-
     this.options = _.extend({
       sdkVersion: ML.VERSION,
       appUserId: installation,
@@ -40,8 +39,7 @@ module.exports = function (ML) {
       channel: UNKNOWN,
       network: UNKNOWN,
       carrier: UNKNOWN,
-      national: UNKNOWN,
-      deviceModel: UNKNOWN
+      national: UNKNOWN
     }, options);
 
     this.trackPageBegin();
