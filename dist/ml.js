@@ -13,7 +13,7 @@ module.exports = function (ML) {
     var REFERRER_START = '8cf1f64d97224f6eba3867b57822f528';
     var detect = new ML.Detect();
 
-    var installation = ML.localStorage.getItem('installation');
+    var installation = ML.store.get('installation');
     if(!installation){
       installation = uuid.v1();
     }
@@ -44,12 +44,12 @@ module.exports = function (ML) {
 
     this.trackPageBegin();
     //Track new user only one time.
-    if(!ML.localStorage.getItem('installation')){
+    if(!ML.store.get('installation')){
       this._trackNewUser();
     }
     
-    if(!ML.localStorage.getItem('installation')){
-      ML.localStorage.setItem('installation', installation);
+    if(!ML.store.get('installation')){
+      ML.store.set('installation', installation);
     }
   };
 
@@ -214,7 +214,7 @@ module.exports = function (ML) {
     }
   })
 };
-},{"underscore":20}],2:[function(require,module,exports){
+},{"underscore":21}],2:[function(require,module,exports){
 'use strict';
 
 var _ = require('underscore');
@@ -259,7 +259,7 @@ module.exports = function (ML) {
   });
 
 };
-},{"underscore":20,"web-detector":22}],3:[function(require,module,exports){
+},{"underscore":21,"web-detector":23}],3:[function(require,module,exports){
 'use strict';
 
 var _ = require('underscore');
@@ -614,7 +614,7 @@ module.exports = function(ML) {
 
 };
 
-},{"underscore":20}],4:[function(require,module,exports){
+},{"underscore":21}],4:[function(require,module,exports){
 /*global _: false */
 module.exports = function(ML) {
   var eventSplitter = /\s+/;
@@ -784,7 +784,7 @@ ML._ = require('underscore');
 ML.VERSION = require('./version');
 
 ML.Promise = require('./promise');
-ML.localStorage = require('localStorage');
+ML.store = require('./store')();
 
 ML.useCNServer = function(){
   ML.serverURL = 'https://api.maxleap.cn/';
@@ -816,7 +816,7 @@ require('./analytics')(ML);
 ML.ML = ML;
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./analytics":1,"./detect":2,"./error":3,"./event":4,"./file":6,"./geopoint":7,"./object":8,"./op":9,"./promise":10,"./query":11,"./relation":12,"./user":13,"./utils":14,"./version":15,"./view":16,"localStorage":18,"node-uuid":19,"underscore":20}],6:[function(require,module,exports){
+},{"./analytics":1,"./detect":2,"./error":3,"./event":4,"./file":6,"./geopoint":7,"./object":8,"./op":9,"./promise":10,"./query":11,"./relation":12,"./store":13,"./user":14,"./utils":15,"./version":16,"./view":17,"node-uuid":19,"underscore":21}],6:[function(require,module,exports){
 'use strict';
 var _ = require('underscore');
 module.exports = function () {
@@ -882,7 +882,7 @@ module.exports = function () {
   });
 
 };
-},{"underscore":20}],7:[function(require,module,exports){
+},{"underscore":21}],7:[function(require,module,exports){
 var _ = require('underscore');
 
 /*global navigator: false */
@@ -1056,7 +1056,7 @@ module.exports = function(ML) {
   };
 };
 
-},{"underscore":20}],8:[function(require,module,exports){
+},{"underscore":21}],8:[function(require,module,exports){
 'use strict';
 
 var _ = require('underscore');
@@ -2535,7 +2535,7 @@ module.exports = function (ML) {
 
 };
 
-},{"underscore":20}],9:[function(require,module,exports){
+},{"underscore":21}],9:[function(require,module,exports){
 'use strict';
 var _ = require('underscore');
 
@@ -3059,7 +3059,7 @@ module.exports = function(ML) {
 
 };
 
-},{"underscore":20}],10:[function(require,module,exports){
+},{"underscore":21}],10:[function(require,module,exports){
 (function (process){
 'use strict';
 var _ = require('underscore');
@@ -3654,7 +3654,7 @@ Promise.prototype.finally = Promise.prototype.always;
 Promise.prototype.try = Promise.prototype.done;
 
 }).call(this,require("1YiZ5S"))
-},{"1YiZ5S":17,"underscore":20}],11:[function(require,module,exports){
+},{"1YiZ5S":18,"underscore":21}],11:[function(require,module,exports){
 'use strict';
 
 var _ = require('underscore');
@@ -4589,7 +4589,7 @@ module.exports = function(ML) {
    });
 };
 
-},{"underscore":20}],12:[function(require,module,exports){
+},{"underscore":21}],12:[function(require,module,exports){
 'use strict';
 var _ = require('underscore');
 
@@ -4706,7 +4706,26 @@ module.exports = function(ML) {
   };
 };
 
-},{"underscore":20}],13:[function(require,module,exports){
+},{"underscore":21}],13:[function(require,module,exports){
+'use strict';
+
+module.exports = function(){
+
+  var cookie = require('tiny-cookie');
+  function set(key, value){
+    cookie.set(key, value);
+  }
+
+  function get(key){
+    return cookie.get(key);
+  }
+
+  return {
+    set: set,
+    get: get
+  }
+};
+},{"tiny-cookie":20}],14:[function(require,module,exports){
 'use strict';
 
 var _ = require('underscore');
@@ -5721,7 +5740,7 @@ module.exports = function(ML) {
   });
 };
 
-},{"underscore":20}],14:[function(require,module,exports){
+},{"underscore":21}],15:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -6414,12 +6433,12 @@ module.exports = function (ML) {
 };
 
 }).call(this,require("1YiZ5S"))
-},{"1YiZ5S":17,"underscore":20}],15:[function(require,module,exports){
+},{"1YiZ5S":18,"underscore":21}],16:[function(require,module,exports){
 'use strict';
 
 module.exports = "v2.0.2";
 
-},{}],16:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 'use strict';
 
 var _ = require('underscore');
@@ -6627,7 +6646,7 @@ module.exports = function(ML) {
 
 };
 
-},{"underscore":20}],17:[function(require,module,exports){
+},{"underscore":21}],18:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -6692,64 +6711,6 @@ process.chdir = function (dir) {
     throw new Error('process.chdir is not supported');
 };
 
-},{}],18:[function(require,module,exports){
-(function (global){
-// http://www.rajdeepd.com/articles/chrome/localstrg/LocalStorageSample.htm
-
-// NOTE:
-// this varies from actual localStorage in some subtle ways
-
-// also, there is no persistence
-// TODO persist
-(function () {
-  "use strict";
-
-  var db;
-
-  function LocalStorage() {
-  }
-  db = LocalStorage;
-
-  db.prototype.getItem = function (key) {
-    if (this.hasOwnProperty(key)) {
-      return String(this[key]);
-    }
-    return null;
-  };
-
-  db.prototype.setItem = function (key, val) {
-    this[key] = String(val);
-  };
-
-  db.prototype.removeItem = function (key) {
-    delete this[key];
-  };
-
-  db.prototype.clear = function () {
-    var self = this;
-    Object.keys(self).forEach(function (key) {
-      self[key] = undefined;
-      delete self[key];
-    });
-  };
-
-  db.prototype.key = function (i) {
-    i = i || 0;
-    return Object.keys(this)[i];
-  };
-
-  db.prototype.__defineGetter__('length', function () {
-    return Object.keys(this).length;
-  });
-
-  if (global.localStorage) {
-    module.exports = localStorage;
-  } else {
-    module.exports = new LocalStorage();
-  }
-}());
-
-}).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}],19:[function(require,module,exports){
 //     uuid.js
 //
@@ -7000,6 +6961,152 @@ process.chdir = function (dir) {
 }).call(this);
 
 },{}],20:[function(require,module,exports){
+/*!
+ * tiny-cookie - A tiny cookie manipulation plugin
+ * https://github.com/Alex1990/tiny-cookie
+ * Under the MIT license | (c) Alex Chao
+ */
+
+!(function(root, factory) {
+
+  // Uses CommonJS, AMD or browser global to create a jQuery plugin.
+  // See: https://github.com/umdjs/umd
+  if (typeof define === 'function' && define.amd) {
+    // Expose this plugin as an AMD module. Register an anonymous module.
+    define(factory);
+  } else if (typeof exports === 'object') {
+    // Node/CommonJS module
+    module.exports = factory();
+  } else {
+    // Browser globals 
+    root.Cookie = factory();
+  }
+
+}(this, function() {
+
+  'use strict';
+
+  // The public function which can get/set/remove cookie.
+  function Cookie(key, value, opts) {
+    if (value === void 0) {
+      return Cookie.get(key);
+    } else if (value === null) {
+      Cookie.remove(key);
+    } else {
+      Cookie.set(key, value, opts);
+    }
+  }
+
+  // Check if the cookie is enabled.
+  Cookie.enabled = function() {
+    var key = '__test_key';
+    var enabled;
+
+    document.cookie = key + '=1';
+    enabled = !!document.cookie;
+
+    if (enabled) Cookie.remove(key);
+
+    return enabled;
+  };
+
+  // Get the cookie value by the key.
+  Cookie.get = function(key, raw) {
+    if (typeof key !== 'string' || !key) return null;
+
+    key = '(?:^|; )' + escapeRe(key) + '(?:=([^;]*?))?(?:;|$)';
+
+    var reKey = new RegExp(key);
+    var res = reKey.exec(document.cookie);
+
+    return res !== null ? (raw ? res[1] : decodeURIComponent(res[1])) : null;
+  };
+
+  // Get the cookie's value without decoding.
+  Cookie.getRaw = function(key) {
+    return Cookie.get(key, true);
+  };
+
+  // Set a cookie.
+  Cookie.set = function(key, value, raw, opts) {
+    if (raw !== true) {
+      opts = raw;
+      raw = false;
+    }
+    opts = opts ? convert(opts) : convert({});
+    var cookie = key + '=' + (raw ? value : encodeURIComponent(value)) + opts;
+    document.cookie = cookie;
+  };
+
+  // Set a cookie without encoding the value.
+  Cookie.setRaw = function(key, value, opts) {
+    Cookie.set(key, value, true, opts);
+  };
+
+  // Remove a cookie by the specified key.
+  Cookie.remove = function(key) {
+    Cookie.set(key, 'a', { expires: new Date() });
+  };
+
+  // Helper function
+  // ---------------
+
+  // Escape special characters.
+  function escapeRe(str) {
+    return str.replace(/[.*+?^$|[\](){}\\-]/g, '\\$&');
+  }
+
+  // Convert an object to a cookie option string.
+  function convert(opts) {
+    var res = '';
+
+    for (var p in opts) {
+      if (opts.hasOwnProperty(p)) {
+
+        if (p === 'expires') {
+          var expires = opts[p];
+          if (typeof expires !== 'object') {
+            expires += typeof expires === 'number' ? 'D' : '';
+            expires = computeExpires(expires);
+          }
+          opts[p] = expires.toUTCString();
+        }
+
+        res += ';' + p + '=' + opts[p];
+      }
+    }
+
+    if (!opts.hasOwnProperty('path')) {
+      res += ';path=/';
+    }
+
+    return res;
+  }
+
+  // Return a future date by the given string.
+  function computeExpires(str) {
+    var expires = new Date();
+    var lastCh = str.charAt(str.length - 1);
+    var value = parseInt(str, 10);
+
+    switch (lastCh) {
+      case 'Y': expires.setFullYear(expires.getFullYear() + value); break;
+      case 'M': expires.setMonth(expires.getMonth() + value); break;
+      case 'D': expires.setDate(expires.getDate() + value); break;
+      case 'h': expires.setHours(expires.getHours() + value); break;
+      case 'm': expires.setMinutes(expires.getMinutes() + value); break;
+      case 's': expires.setSeconds(expires.getSeconds() + value); break;
+      default: expires = new Date(str);
+    }
+
+    return expires;
+  }
+
+  return Cookie;
+
+}));
+
+},{}],21:[function(require,module,exports){
 //     Underscore.js 1.8.3
 //     http://underscorejs.org
 //     (c) 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
@@ -8549,7 +8656,7 @@ process.chdir = function (dir) {
   }
 }.call(this));
 
-},{}],21:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 "use strict";
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -8771,7 +8878,7 @@ var Detector = function () {
 }();
 
 module.exports = Detector;
-},{}],22:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 "use strict";
 
 require('es5-shim');
@@ -8882,7 +8989,7 @@ function WebParse(ua) {
 var Tan = WebParse(ua);
 Tan.parse = WebParse;
 module.exports = Tan;
-},{"./detector.js":21,"./web-rules.js":23,"es5-shim":24}],23:[function(require,module,exports){
+},{"./detector.js":22,"./web-rules.js":24,"es5-shim":25}],24:[function(require,module,exports){
 (function (global){
 "use strict";
 
@@ -9198,7 +9305,7 @@ module.exports = {
   re_msie: re_msie
 };
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],24:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 /*!
  * https://github.com/es-shims/es5-shim
  * @license es5-shim Copyright 2009-2015 by contributors, MIT License
