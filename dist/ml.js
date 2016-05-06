@@ -9,7 +9,7 @@ module.exports = function (ML) {
    */
   ML.Analytics = function(options){
     var UUID = uuid.v1();
-    var UNKNOWN = '0,0';
+    var UNKNOWN = this.UNKNOWN = '0,0';
     var INSTALLATION_FLAG = 'ml_installation_flag';
     var REFERRER_START = '8cf1f64d97224f6eba3867b57822f528';
     var detector = new ML.Detector();
@@ -97,8 +97,8 @@ module.exports = function (ML) {
         TimeLineEvent: [
           _.extend({}, this.options, {
             eventId: data.eventId,
-            eventName: data.eventName,
-            eventNickName: data.eventNickName,
+            eventName: this.UNKNOWN,
+            eventNickName: this.UNKNOWN,
             eventType: 1
           })
         ]
@@ -116,8 +116,8 @@ module.exports = function (ML) {
         TimeLineEvent: [
           _.extend({}, this.options, {
             eventId: data.eventId,
-            eventName: data.eventName,
-            eventNickName: data.eventNickName,
+            eventName: this.UNKNOWN,
+            eventNickName: this.UNKNOWN,
             eventType: 0
           })
         ]
@@ -135,8 +135,8 @@ module.exports = function (ML) {
         TimeLineEvent: [
           _.extend({}, this.options, {
             eventId: data.eventId,
-            eventName: data.eventName,
-            eventNickName: data.eventNickName,
+            eventName: this.UNKNOWN,
+            eventNickName: this.UNKNOWN,
             eventType: 2
           })
         ]
@@ -154,8 +154,8 @@ module.exports = function (ML) {
         TimeLineEvent: [
           _.extend({}, this.options, {
             eventId: data.eventId,
-            eventName: data.eventName,
-            eventNickName: data.eventNickName,
+            eventName: this.UNKNOWN,
+            eventNickName: this.UNKNOWN,
             eventType: 3
           })
         ]

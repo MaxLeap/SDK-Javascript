@@ -1,9 +1,11 @@
+var appId = '572afb8a667a230001e5642a';
+var userId = '572aaf3c70c6760001495048';
 describe('Analytics', function () {
   describe('#PageView', function(){
     it('should track page begin', function(done){
       var options = {
-        appId: '572afb8a667a230001e5642a',
-        userId: '572aaf3c70c6760001495048',
+        appId: appId,
+        userId: userId,
         appVersion: '1.0'
       };
       var analytics = new ML.Analytics(options);
@@ -17,8 +19,8 @@ describe('Analytics', function () {
   describe('#CustomEvent', function(){
     it('should track event', function(done){
       var options = {
-        appId: '572afb8a667a230001e5642a',
-        userId: '572aaf3c70c6760001495048',
+        appId: appId,
+        userId: userId,
         appVersion: '1.0'
       };
       var analytics = new ML.Analytics(options);
@@ -33,15 +35,13 @@ describe('Analytics', function () {
   describe('#TimelineEvent', function(){
     it('should track login event', function(done){
       var options = {
-        appId: '572afb8a667a230001e5642a',
-        userId: '572aaf3c70c6760001495048',
+        appId: appId,
+        userId: userId,
         appVersion: '1.0'
       };
       var analytics = new ML.Analytics(options);
       var data = {
-        eventId: 'logineventid',
-        eventName: 'logineventname',
-        eventNickName: 'logineventnickname'
+        eventId: 'logineventid'
       };
       analytics.trackUserlogin(data).then(function(res){
         expect(res.errorCode).to.be(0);
@@ -51,15 +51,13 @@ describe('Analytics', function () {
 
     it('should track register event', function(done){
       var options = {
-        appId: '572afb8a667a230001e5642a',
-        userId: '572aaf3c70c6760001495048',
+        appId: appId,
+        userId: userId,
         appVersion: '1.0'
       };
       var analytics = new ML.Analytics(options);
       var data = {
-        eventId: 'registereventid',
-        eventName: 'registereventname',
-        eventNickName: 'registereventnickname'
+        eventId: 'registereventid'
       };
       analytics.trackUserRegister(data).then(function(res){
         expect(res.errorCode).to.be(0);
@@ -69,15 +67,13 @@ describe('Analytics', function () {
 
     it('should track logout event', function(done){
       var options = {
-        appId: '572afb8a667a230001e5642a',
-        userId: '572aaf3c70c6760001495048',
+        appId: appId,
+        userId: userId,
         appVersion: '1.0'
       };
       var analytics = new ML.Analytics(options);
       var data = {
-        eventId: 'logouteventid',
-        eventName: 'logouteventname',
-        eventNickName: 'logouteventnickname'
+        eventId: 'logouteventid'
       };
       analytics.trackUserLogout(data).then(function(res){
         expect(res.errorCode).to.be(0);
@@ -87,15 +83,13 @@ describe('Analytics', function () {
 
     it('should track session start event', function(done){
       var options = {
-        appId: '572afb8a667a230001e5642a',
-        userId: '572aaf3c70c6760001495048',
+        appId: appId,
+        userId: userId,
         appVersion: '1.0'
       };
       var analytics = new ML.Analytics(options);
       var data = {
-        eventId: 'sessionstartid',
-        eventName: 'sessionstartname',
-        eventNickName: 'sessionstartnickname'
+        eventId: 'sessionstartid'
       };
       analytics.trackSessionStart(data).then(function(res){
         expect(res.errorCode).to.be(0);
