@@ -216,7 +216,7 @@ module.exports = function (ML) {
     }
   })
 };
-},{"underscore":21}],2:[function(require,module,exports){
+},{"underscore":22}],2:[function(require,module,exports){
 'use strict';
 
 var _ = require('underscore');
@@ -261,7 +261,7 @@ module.exports = function (ML) {
   });
 
 };
-},{"underscore":21,"web-detector":23}],3:[function(require,module,exports){
+},{"underscore":22,"web-detector":24}],3:[function(require,module,exports){
 'use strict';
 
 var _ = require('underscore');
@@ -616,7 +616,7 @@ module.exports = function(ML) {
 
 };
 
-},{"underscore":21}],4:[function(require,module,exports){
+},{"underscore":22}],4:[function(require,module,exports){
 /*global _: false */
 module.exports = function(ML) {
   var eventSplitter = /\s+/;
@@ -786,6 +786,7 @@ ML._ = require('underscore');
 ML.VERSION = require('./version');
 
 ML.Promise = require('./promise');
+ML.localStorage = require('localStorage');
 ML.store = require('./store')();
 
 ML.useCNServer = function(){
@@ -818,7 +819,7 @@ require('./analytics')(ML);
 ML.ML = ML;
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./analytics":1,"./detector":2,"./error":3,"./event":4,"./file":6,"./geopoint":7,"./object":8,"./op":9,"./promise":10,"./query":11,"./relation":12,"./store":13,"./user":14,"./utils":15,"./version":16,"./view":17,"node-uuid":19,"underscore":21}],6:[function(require,module,exports){
+},{"./analytics":1,"./detector":2,"./error":3,"./event":4,"./file":6,"./geopoint":7,"./object":8,"./op":9,"./promise":10,"./query":11,"./relation":12,"./store":13,"./user":14,"./utils":15,"./version":16,"./view":17,"localStorage":19,"node-uuid":20,"underscore":22}],6:[function(require,module,exports){
 'use strict';
 var _ = require('underscore');
 module.exports = function () {
@@ -856,7 +857,7 @@ module.exports = function () {
      * @return {String}
      */
     url: function () {
-      return '//' + this._url;
+      return this._url ? 'https://' + this._url: '';
     },
 
     /**
@@ -884,7 +885,7 @@ module.exports = function () {
   });
 
 };
-},{"underscore":21}],7:[function(require,module,exports){
+},{"underscore":22}],7:[function(require,module,exports){
 var _ = require('underscore');
 
 /*global navigator: false */
@@ -1058,7 +1059,7 @@ module.exports = function(ML) {
   };
 };
 
-},{"underscore":21}],8:[function(require,module,exports){
+},{"underscore":22}],8:[function(require,module,exports){
 'use strict';
 
 var _ = require('underscore');
@@ -2537,7 +2538,7 @@ module.exports = function (ML) {
 
 };
 
-},{"underscore":21}],9:[function(require,module,exports){
+},{"underscore":22}],9:[function(require,module,exports){
 'use strict';
 var _ = require('underscore');
 
@@ -3061,7 +3062,7 @@ module.exports = function(ML) {
 
 };
 
-},{"underscore":21}],10:[function(require,module,exports){
+},{"underscore":22}],10:[function(require,module,exports){
 (function (process){
 'use strict';
 var _ = require('underscore');
@@ -3656,7 +3657,7 @@ Promise.prototype.finally = Promise.prototype.always;
 Promise.prototype.try = Promise.prototype.done;
 
 }).call(this,require("1YiZ5S"))
-},{"1YiZ5S":18,"underscore":21}],11:[function(require,module,exports){
+},{"1YiZ5S":18,"underscore":22}],11:[function(require,module,exports){
 'use strict';
 
 var _ = require('underscore');
@@ -4591,7 +4592,7 @@ module.exports = function(ML) {
    });
 };
 
-},{"underscore":21}],12:[function(require,module,exports){
+},{"underscore":22}],12:[function(require,module,exports){
 'use strict';
 var _ = require('underscore');
 
@@ -4708,7 +4709,7 @@ module.exports = function(ML) {
   };
 };
 
-},{"underscore":21}],13:[function(require,module,exports){
+},{"underscore":22}],13:[function(require,module,exports){
 'use strict';
 
 module.exports = function(){
@@ -4728,7 +4729,7 @@ module.exports = function(){
     get: get
   }
 };
-},{"tiny-cookie":20}],14:[function(require,module,exports){
+},{"tiny-cookie":21}],14:[function(require,module,exports){
 'use strict';
 
 var _ = require('underscore');
@@ -5743,7 +5744,7 @@ module.exports = function(ML) {
   });
 };
 
-},{"underscore":21}],15:[function(require,module,exports){
+},{"underscore":22}],15:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -6436,7 +6437,7 @@ module.exports = function (ML) {
 };
 
 }).call(this,require("1YiZ5S"))
-},{"1YiZ5S":18,"underscore":21}],16:[function(require,module,exports){
+},{"1YiZ5S":18,"underscore":22}],16:[function(require,module,exports){
 'use strict';
 
 module.exports = "v2.0.2";
@@ -6649,7 +6650,7 @@ module.exports = function(ML) {
 
 };
 
-},{"underscore":21}],18:[function(require,module,exports){
+},{"underscore":22}],18:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -6715,6 +6716,64 @@ process.chdir = function (dir) {
 };
 
 },{}],19:[function(require,module,exports){
+(function (global){
+// http://www.rajdeepd.com/articles/chrome/localstrg/LocalStorageSample.htm
+
+// NOTE:
+// this varies from actual localStorage in some subtle ways
+
+// also, there is no persistence
+// TODO persist
+(function () {
+  "use strict";
+
+  var db;
+
+  function LocalStorage() {
+  }
+  db = LocalStorage;
+
+  db.prototype.getItem = function (key) {
+    if (this.hasOwnProperty(key)) {
+      return String(this[key]);
+    }
+    return null;
+  };
+
+  db.prototype.setItem = function (key, val) {
+    this[key] = String(val);
+  };
+
+  db.prototype.removeItem = function (key) {
+    delete this[key];
+  };
+
+  db.prototype.clear = function () {
+    var self = this;
+    Object.keys(self).forEach(function (key) {
+      self[key] = undefined;
+      delete self[key];
+    });
+  };
+
+  db.prototype.key = function (i) {
+    i = i || 0;
+    return Object.keys(this)[i];
+  };
+
+  db.prototype.__defineGetter__('length', function () {
+    return Object.keys(this).length;
+  });
+
+  if (global.localStorage) {
+    module.exports = localStorage;
+  } else {
+    module.exports = new LocalStorage();
+  }
+}());
+
+}).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{}],20:[function(require,module,exports){
 //     uuid.js
 //
 //     Copyright (c) 2010-2012 Robert Kieffer
@@ -6963,7 +7022,7 @@ process.chdir = function (dir) {
   }
 }).call(this);
 
-},{}],20:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 /*!
  * tiny-cookie - A tiny cookie manipulation plugin
  * https://github.com/Alex1990/tiny-cookie
@@ -7109,7 +7168,7 @@ process.chdir = function (dir) {
 
 }));
 
-},{}],21:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 //     Underscore.js 1.8.3
 //     http://underscorejs.org
 //     (c) 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
@@ -8659,7 +8718,7 @@ process.chdir = function (dir) {
   }
 }.call(this));
 
-},{}],22:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 "use strict";
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -8881,7 +8940,7 @@ var Detector = function () {
 }();
 
 module.exports = Detector;
-},{}],23:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 "use strict";
 
 require('es5-shim');
@@ -8992,7 +9051,7 @@ function WebParse(ua) {
 var Tan = WebParse(ua);
 Tan.parse = WebParse;
 module.exports = Tan;
-},{"./detector.js":22,"./web-rules.js":24,"es5-shim":25}],24:[function(require,module,exports){
+},{"./detector.js":23,"./web-rules.js":25,"es5-shim":26}],25:[function(require,module,exports){
 (function (global){
 "use strict";
 
@@ -9308,7 +9367,7 @@ module.exports = {
   re_msie: re_msie
 };
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],25:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 /*!
  * https://github.com/es-shims/es5-shim
  * @license es5-shim Copyright 2009-2015 by contributors, MIT License
