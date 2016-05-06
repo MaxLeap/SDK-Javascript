@@ -10,10 +10,11 @@ module.exports = function (ML) {
   ML.Analytics = function(options){
     var UUID = uuid.v1();
     var UNKNOWN = '0,0';
+    var INSTALLATION_FLAG = 'ml_installation_flag';
     var REFERRER_START = '8cf1f64d97224f6eba3867b57822f528';
     var detector = new ML.Detector();
 
-    var installation = ML.store.get('installation');
+    var installation = ML.store.get(INSTALLATION_FLAG);
     if(!installation){
       installation = uuid.v1();
     }
@@ -45,12 +46,12 @@ module.exports = function (ML) {
 
     this.trackPageBegin();
     //Track new user only one time.
-    if(!ML.store.get('installation')){
+    if(!ML.store.get(INSTALLATION_FLAG)){
       this._trackNewUser();
     }
     
-    if(!ML.store.get('installation')){
-      ML.store.set('installation', installation);
+    if(!ML.store.get(INSTALLATION_FLAG)){
+      ML.store.set(INSTALLATION_FLAG, installation, { expires: '1Y' });
     }
   };
 
@@ -4713,8 +4714,9 @@ module.exports = function(ML) {
 module.exports = function(){
 
   var cookie = require('tiny-cookie');
-  function set(key, value){
-    cookie.set(key, value);
+
+  function set(key, value, options){
+    cookie.set(key, value, options);
   }
 
   function get(key){
