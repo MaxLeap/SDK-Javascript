@@ -24,7 +24,7 @@ describe('Analytics', function () {
         appVersion: '1.0'
       };
       var analytics = new ML.Analytics(options);
-      var eventData = {"sex":"man","age":"18"};
+      var eventData = {"gender":"male","age":"18"};
       analytics.trackEvent('event1', eventData).then(function(res){
         expect(res.errorCode).to.be(0);
         done();
