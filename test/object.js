@@ -3,7 +3,7 @@ var Comment = ML.Object.extend('Comment');
 var GameScore = ML.Object.extend('GameScore');
 var Person = ML.Object.extend('Person');
 
-describe('Objects', function () {
+describe.only('Objects', function () {
   var objId;
   var gameScore = GameScore.new();
   describe('#Saving Objects', function () {
@@ -160,14 +160,6 @@ describe('Objects', function () {
       post.set('tags', ['Frontend', 'JavaScript']);
       post.save().then(function (post) {
         expect(post.get('tags').length).to.be(2);
-        done();
-      }).catch(done);
-    });
-
-    it('should remove tags', function (done) {
-      post.remove('tags', 'Frontend');
-      post.save().then(function (post) {
-        expect(post.get('tags').length).to.be(1);
         done();
       }).catch(done);
     });
