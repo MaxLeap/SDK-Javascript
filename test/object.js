@@ -3,7 +3,7 @@ var Comment = ML.Object.extend('Comment');
 var GameScore = ML.Object.extend('GameScore');
 var Person = ML.Object.extend('Person');
 
-describe.only('Objects', function () {
+describe('Objects', function () {
   var objId;
   var gameScore = GameScore.new();
   describe('#Saving Objects', function () {
@@ -72,12 +72,26 @@ describe.only('Objects', function () {
   });
 
   describe('Relation', function () {
+    var postId;
     it('should save comment with post', function(done){
       var post = new Post();
       post.set('content', '这是我的第一条微博信息，请大家多多关照。');
 
       var comment = new Comment();
       comment.set('content', '期待您更多的微博信息。');
+      comment.add('post', post);
+      comment.save().then(function(comment){
+        postId = comment.get('post')[0].id;
+        expect(comment.id).to.be.ok();
+        expect(comment.get('post')[0].id).to.be.ok();
+        done();
+      }).catch(done);
+    });
+
+    it('should save comment with an exsit post', function(done){
+      var post = ML.Object.createWithoutData('Post', postId);
+      var comment = new Comment();
+      comment.set('content', '评论');
       comment.add('post', post);
       comment.save().then(function(comment){
         expect(comment.id).to.be.ok();

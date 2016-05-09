@@ -2747,7 +2747,7 @@ module.exports = function(ML) {
      * @return {Object}
      */
     toJSON: function() {
-      return { __op: "Add", objects: ML._encode(this.objects()) };
+      return ML._encode(this.objects());
     },
 
     _mergeWithPrevious: function(previous) {
@@ -6440,7 +6440,7 @@ module.exports = function (ML) {
 },{"1YiZ5S":18,"underscore":22}],16:[function(require,module,exports){
 'use strict';
 
-module.exports = "v2.0.2";
+module.exports = "v2.0.3";
 
 },{}],17:[function(require,module,exports){
 'use strict';
