@@ -21,9 +21,8 @@ module.exports = function (ML) {
     this.options = _.extend({
       sdkVersion: ML.VERSION,
       appUserId: installation,
-      uuid: UUID,
       sessionId: UUID,
-      deviceId: UUID,
+      deviceId: installation,
       duration: 0,
       push: false,
       upgrade: false,
@@ -63,7 +62,9 @@ module.exports = function (ML) {
     trackPageBegin: function(){
       var data = {
         PageView: [
-          _.extend({}, this.options)
+          _.extend({}, this.options, {
+            uuid: uuid.v1()
+          })
         ]
       };
       this._trackSessionBegin();
@@ -80,7 +81,8 @@ module.exports = function (ML) {
         Event: [
           _.extend({}, this.options, {
             eventId: eventId,
-            attrs: attrs
+            attrs: attrs,
+            uuid: uuid.v1()
           })
         ]
       };
@@ -99,7 +101,8 @@ module.exports = function (ML) {
             eventId: data.eventId,
             eventName: this.UNKNOWN,
             eventNickName: this.UNKNOWN,
-            eventType: 1
+            eventType: 1,
+            uuid: uuid.v1()
           })
         ]
       };
@@ -118,7 +121,8 @@ module.exports = function (ML) {
             eventId: data.eventId,
             eventName: this.UNKNOWN,
             eventNickName: this.UNKNOWN,
-            eventType: 0
+            eventType: 0,
+            uuid: uuid.v1()
           })
         ]
       };
@@ -137,7 +141,8 @@ module.exports = function (ML) {
             eventId: data.eventId,
             eventName: this.UNKNOWN,
             eventNickName: this.UNKNOWN,
-            eventType: 2
+            eventType: 2,
+            uuid: uuid.v1()
           })
         ]
       };
@@ -156,7 +161,8 @@ module.exports = function (ML) {
             eventId: data.eventId,
             eventName: this.UNKNOWN,
             eventNickName: this.UNKNOWN,
-            eventType: 3
+            eventType: 3,
+            uuid: uuid.v1()
           })
         ]
       };
@@ -170,7 +176,9 @@ module.exports = function (ML) {
     _trackSessionBegin: function(){
       var data = {
         Session: [
-          _.extend({}, this.options)
+          _.extend({}, this.options, {
+            uuid: uuid.v1()
+          })
         ]
       };
       return ML.Analytics._request(data);
@@ -183,7 +191,9 @@ module.exports = function (ML) {
     _trackNewUser: function(){
       var data = {
         NewUser: [
-          _.extend({}, this.options)
+          _.extend({}, this.options, {
+            uuid: uuid.v1()
+          })
         ]
       };
       return ML.Analytics._request(data);
