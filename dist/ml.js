@@ -68,7 +68,7 @@ module.exports = function (ML) {
         ]
       };
       this._trackSessionBegin();
-      return ML.Analytics._request(data);
+      return ML.Analytics._request(data, {appId: this.options.appId});
     },
     /**
      * Track custom event.
@@ -86,7 +86,7 @@ module.exports = function (ML) {
           })
         ]
       };
-      return ML.Analytics._request(data);
+      return ML.Analytics._request(data, {appId: this.options.appId});
     },
 
     /**
@@ -106,7 +106,7 @@ module.exports = function (ML) {
           })
         ]
       };
-      return ML.Analytics._request(data);
+      return ML.Analytics._request(data, {appId: this.options.appId});
     },
 
     /**
@@ -126,7 +126,7 @@ module.exports = function (ML) {
           })
         ]
       };
-      return ML.Analytics._request(data);
+      return ML.Analytics._request(data, {appId: this.options.appId});
     },
 
     /**
@@ -146,7 +146,7 @@ module.exports = function (ML) {
           })
         ]
       };
-      return ML.Analytics._request(data);
+      return ML.Analytics._request(data, {appId: this.options.appId});
     },
 
     /**
@@ -166,7 +166,7 @@ module.exports = function (ML) {
           })
         ]
       };
-      return ML.Analytics._request(data);
+      return ML.Analytics._request(data, {appId: this.options.appId});
     },
 
     /**
@@ -181,7 +181,7 @@ module.exports = function (ML) {
           })
         ]
       };
-      return ML.Analytics._request(data);
+      return ML.Analytics._request(data, {appId: this.options.appId});
     },
 
     /**
@@ -196,7 +196,7 @@ module.exports = function (ML) {
           })
         ]
       };
-      return ML.Analytics._request(data);
+      return ML.Analytics._request(data, {appId: this.options.appId});
     }
   });
 
@@ -208,18 +208,19 @@ module.exports = function (ML) {
      * @returns {Promise}
      * @private
      */
-    _request: function(data, i){
+    _request: function(data, headers, i){
       if(!ML.analyticsEnable){
         return;
       }
       return ML._ajax('POST', ML.serverURL + '2.0/analytics/at', JSON.stringify(data), null, null, {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'X-ML-appid': headers.appId
       }).then(function(res){
         return res;
       }, function(res){
         i = i || 0;
         if(i < 2){
-          ML.Analytics._request(data, ++i);
+          ML.Analytics._request(data, headers, ++i);
         }
         return res;
       });
