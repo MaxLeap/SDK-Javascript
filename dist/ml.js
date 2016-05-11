@@ -868,7 +868,7 @@ module.exports = function () {
      * @return {String}
      */
     url: function () {
-      return this._url ? 'https://' + this._url: '';
+      return this._url ? 'https://' + this._url.replace('https://', ''): '';
     },
 
     /**
