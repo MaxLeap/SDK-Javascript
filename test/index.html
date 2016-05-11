@@ -59,6 +59,7 @@
       var mlFile = new ML.File(name, file);
       mlFile.save().then(function(file){
         document.querySelector('#avatarImg').src = file.url();
+        file.destroy();
       });
 //      var Post = ML.Object.extend('Post');
 //      var myPost = new Post();

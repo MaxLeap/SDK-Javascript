@@ -6068,11 +6068,14 @@ module.exports = function (ML) {
             //对于一些请求(如delete files)，服务器不返回response，只能通过xhr.status判断请求结果
             promise.resolve(xhr.status);
           }
-          if (response && !response.errorCode) {
-            promise.resolve(response, xhr.status, xhr);
-          }else{
-            promise.reject(xhr);
+          if(xhr.status !== 204){ //204是文件删除接口的状态返回码
+            if (response && !response.errorCode) {
+              promise.resolve(response, xhr.status, xhr);
+            }else{
+              promise.reject(xhr);
+            }
           }
+
         } else {
           promise.reject(xhr);
         }
