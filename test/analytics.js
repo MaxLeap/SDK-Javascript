@@ -6,7 +6,8 @@ describe('Analytics', function () {
       var options = {
         appId: appId,
         userId: userId,
-        appVersion: '1.0'
+        appVersion: '1.0',
+        channel: '360'
       };
       var analytics = new ML.Analytics(options);
       analytics.trackPageBegin().then(function(res){
