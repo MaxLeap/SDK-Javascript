@@ -5115,8 +5115,9 @@ module.exports = function(ML) {
      *     the login is complete.
      */
     logIn: function(options) {
+      options = options || {};
       var model = this;
-      var request = ML._request("login", null, null, "POST", this.toJSON());
+      var request = ML._request(options.loginUrl || "login", null, null, "POST", this.toJSON());
       return request.then(function(resp, status, xhr) {
         var serverAttrs = model.parse(resp, status, xhr);
         model._finishFetch(serverAttrs);
@@ -5452,8 +5453,11 @@ module.exports = function(ML) {
      * @see ML.User#logIn
      */
    logInWithMobilePhoneSmsCode: function(mobilePhone, smsCode, options){
+      var options = _.extend({}, options, {
+        loginUrl: 'loginByMobilePhone'
+      });
       var user = ML.Object._create("_User");
-      user._finishFetch({ mobilePhoneNumber: mobilePhone, smsCode: smsCode });
+      user._finishFetch({ mobilePhone: mobilePhone, smsCode: smsCode });
       return user.logIn(options);
    },
 
@@ -5673,7 +5677,7 @@ module.exports = function(ML) {
      * @param {Object} options A Backbone-style options object.
      */
     requestLoginSmsCode: function(mobilePhone, options){
-      var json = { mobilePhoneNumber: mobilePhone };
+      var json = { mobilePhone: mobilePhone };
       var request = ML._request("requestLoginSmsCode", null, null, "POST",
                                    json);
       return request._thenRunCallbacks(options);
@@ -6141,6 +6145,7 @@ module.exports = function (ML) {
       route !== "resetPasswordBySmsCode" &&
       route !== "requestMobilePhoneVerify" &&
       route !== "requestLoginSmsCode" &&
+      route !== "loginByMobilePhone" &&
       route !== "verifyMobilePhone" &&
       route !== "requestSmsCode" &&
       route !== "verifySmsCode" &&

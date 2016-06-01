@@ -63,9 +63,6 @@ describe('User', function(){
       }).catch(done);
     });
 
-    //it.only('should login with wechat', function(){
-    //});
-
     it('should respond missing username', function(done) {
       var user = new ML.User();
       user.setPassword(password);
@@ -88,7 +85,7 @@ describe('User', function(){
       }).catch(done);
     });
 
-    it('Login username not existed', function(done) {
+    it('login username not existed', function(done) {
       ML.User.logIn('invalid username', password).then(function(){
         throw new Error('should not login');
       }, function(err){
@@ -97,7 +94,7 @@ describe('User', function(){
       }).catch(done);
     });
 
-    it('Login password wrong', function(done) {
+    it('login password wrong', function(done) {
       ML.User.logIn(username, 'my wrong pass').then(function(){
         throw new Error('should not login');
       }, function(err){
@@ -105,6 +102,20 @@ describe('User', function(){
         done();
       }).catch(done);
     });
+
+    it('request login smscode', function(done){
+      ML.User.requestLoginSmsCode('18321045236').then(function(res){
+        expect(res.success).to.be(true);
+        done();
+      }).catch(done);
+    });
+    
+    it('login with mobilephone smscode', function(done){
+      ML.User.logInWithMobilePhoneSmsCode('18321045236', '918248').then(function(user){
+        expect(user.authenticated()).to.be(true);
+        done();
+      }).catch(done);
+    })
   });
 
   describe('Current User', function () {
