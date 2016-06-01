@@ -104,14 +104,14 @@ describe('User', function(){
     });
 
     it('request login smscode', function(done){
-      ML.User.requestLoginSmsCode('18321045236').then(function(res){
+      ML.User.requestLoginSmsCode('phonenumber').then(function(res){
         expect(res.success).to.be(true);
         done();
       }).catch(done);
     });
     
     it('login with mobilephone smscode', function(done){
-      ML.User.logInWithMobilePhoneSmsCode('18321045236', '918248').then(function(user){
+      ML.User.logInWithMobilePhoneSmsCode('phonenumber', 'smscode').then(function(user){
         expect(user.authenticated()).to.be(true);
         done();
       }).catch(done);
