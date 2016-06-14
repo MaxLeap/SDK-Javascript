@@ -8,7 +8,7 @@ module.exports = function (ML) {
    * @constructor
    */
   ML.Analytics = function(options){
-    var UUID = uuid.v1();
+    var UUID = uuid.v4();
     var UNKNOWN = this.UNKNOWN = '0,0';
     var INSTALLATION_FLAG = 'ml_installation_flag';
     var REFERRER_START = '8cf1f64d97224f6eba3867b57822f528';
@@ -16,7 +16,7 @@ module.exports = function (ML) {
 
     var installation = ML.store.get(INSTALLATION_FLAG);
     if(!installation){
-      installation = uuid.v1();
+      installation = uuid.v4();
     }
     this.options = _.extend({
       sdkVersion: ML.VERSION,
@@ -63,7 +63,7 @@ module.exports = function (ML) {
       var data = {
         PageView: [
           _.extend({}, this.options, {
-            uuid: uuid.v1()
+            uuid: uuid.v4()
           })
         ]
       };
@@ -82,7 +82,7 @@ module.exports = function (ML) {
           _.extend({}, this.options, {
             eventId: eventId,
             attrs: attrs,
-            uuid: uuid.v1()
+            uuid: uuid.v4()
           })
         ]
       };
@@ -102,7 +102,7 @@ module.exports = function (ML) {
             eventName: this.UNKNOWN,
             eventNickName: this.UNKNOWN,
             eventType: 1,
-            uuid: uuid.v1()
+            uuid: uuid.v4()
           })
         ]
       };
@@ -122,7 +122,7 @@ module.exports = function (ML) {
             eventName: this.UNKNOWN,
             eventNickName: this.UNKNOWN,
             eventType: 0,
-            uuid: uuid.v1()
+            uuid: uuid.v4()
           })
         ]
       };
@@ -142,7 +142,7 @@ module.exports = function (ML) {
             eventName: this.UNKNOWN,
             eventNickName: this.UNKNOWN,
             eventType: 2,
-            uuid: uuid.v1()
+            uuid: uuid.v4()
           })
         ]
       };
@@ -162,7 +162,7 @@ module.exports = function (ML) {
             eventName: this.UNKNOWN,
             eventNickName: this.UNKNOWN,
             eventType: 3,
-            uuid: uuid.v1()
+            uuid: uuid.v4()
           })
         ]
       };
@@ -177,7 +177,7 @@ module.exports = function (ML) {
       var data = {
         Session: [
           _.extend({}, this.options, {
-            uuid: uuid.v1()
+            uuid: uuid.v4()
           })
         ]
       };
@@ -192,7 +192,7 @@ module.exports = function (ML) {
       var data = {
         NewUser: [
           _.extend({}, this.options, {
-            uuid: uuid.v1()
+            uuid: uuid.v4()
           })
         ]
       };
