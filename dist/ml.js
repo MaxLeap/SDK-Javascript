@@ -248,10 +248,12 @@ module.exports = function (ML) {
 var _ = require('underscore');
 require('whatwg-fetch');
 
-/**
- * ML.CloudCode is a management of MaxLeap Cloud Code.
- */
 module.exports = function () {
+
+  /**
+   * ML.CloudCode is a management of MaxLeap Cloud Code.
+   * @class
+   */
   ML.CloudCode = function(){
   };
 
