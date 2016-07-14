@@ -13,7 +13,8 @@
     "node-uuid": "^1.4.3",
     "tiny-cookie": "^0.5.5",
     "underscore": "^1.8.3",
-    "web-detector": "^2.4.12"
+    "web-detector": "^2.4.12",
+    "whatwg-fetch": "^1.0.0"
   },
   "devDependencies": {
     "browserify": "^11.0.1",

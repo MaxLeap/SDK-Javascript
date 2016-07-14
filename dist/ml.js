@@ -243,7 +243,42 @@ module.exports = function (ML) {
     }
   })
 };
-},{"underscore":22}],2:[function(require,module,exports){
+},{"underscore":23}],2:[function(require,module,exports){
+'use strict';
+var _ = require('underscore');
+require('whatwg-fetch');
+
+/**
+ * ML.CloudCode is a management of MaxLeap Cloud Code.
+ */
+module.exports = function () {
+  ML.CloudCode = function(){
+  };
+
+  _.extend(ML.CloudCode.prototype, /** @lends ML.CloudCode.prototype */ {
+    /**
+     * Run cloud function in background.
+     * @param {String} Name of cloud function.
+     * @param {json} Params of cloud function.
+     * @returns {Promise}
+     */
+    callFunctionInBackground: function(name, data){
+      return fetch(ML.serverURL + '2.0/functions/'+name, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-ZCloud-AppId': ML.applicationId,
+          'X-ZCloud-APIKey': ML.applicationKey
+        },
+        body: JSON.stringify(data)
+      })
+        .then(function(res){
+          return res.json();
+        })
+    }
+  })
+};
+},{"underscore":23,"whatwg-fetch":28}],3:[function(require,module,exports){
 'use strict';
 
 var _ = require('underscore');
@@ -288,7 +323,7 @@ module.exports = function (ML) {
   });
 
 };
-},{"underscore":22,"web-detector":24}],3:[function(require,module,exports){
+},{"underscore":23,"web-detector":25}],4:[function(require,module,exports){
 'use strict';
 
 var _ = require('underscore');
@@ -643,7 +678,7 @@ module.exports = function(ML) {
 
 };
 
-},{"underscore":22}],4:[function(require,module,exports){
+},{"underscore":23}],5:[function(require,module,exports){
 /*global _: false */
 module.exports = function(ML) {
   var eventSplitter = /\s+/;
@@ -796,7 +831,7 @@ module.exports = function(ML) {
   ML.Events.unbind = ML.Events.off;
 };
 
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 (function (global){
 /*!
  * LeapCloud JavaScript SDK
@@ -838,6 +873,7 @@ require('./op')(ML);
 require('./relation')(ML);
 require('./file')(ML);
 require('./object')(ML);
+require('./cloudcode')(ML);
 require('./view')(ML);
 require('./user')(ML);
 require('./query')(ML);
@@ -846,7 +882,7 @@ require('./analytics')(ML);
 ML.ML = ML;
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./analytics":1,"./detector":2,"./error":3,"./event":4,"./file":6,"./geopoint":7,"./object":8,"./op":9,"./promise":10,"./query":11,"./relation":12,"./store":13,"./user":14,"./utils":15,"./version":16,"./view":17,"localStorage":19,"node-uuid":20,"underscore":22}],6:[function(require,module,exports){
+},{"./analytics":1,"./cloudcode":2,"./detector":3,"./error":4,"./event":5,"./file":7,"./geopoint":8,"./object":9,"./op":10,"./promise":11,"./query":12,"./relation":13,"./store":14,"./user":15,"./utils":16,"./version":17,"./view":18,"localStorage":20,"node-uuid":21,"underscore":23}],7:[function(require,module,exports){
 'use strict';
 var _ = require('underscore');
 module.exports = function () {
@@ -912,7 +948,7 @@ module.exports = function () {
   });
 
 };
-},{"underscore":22}],7:[function(require,module,exports){
+},{"underscore":23}],8:[function(require,module,exports){
 var _ = require('underscore');
 
 /*global navigator: false */
@@ -1086,7 +1122,7 @@ module.exports = function(ML) {
   };
 };
 
-},{"underscore":22}],8:[function(require,module,exports){
+},{"underscore":23}],9:[function(require,module,exports){
 'use strict';
 
 var _ = require('underscore');
@@ -2565,7 +2601,7 @@ module.exports = function (ML) {
 
 };
 
-},{"underscore":22}],9:[function(require,module,exports){
+},{"underscore":23}],10:[function(require,module,exports){
 'use strict';
 var _ = require('underscore');
 
@@ -3089,7 +3125,7 @@ module.exports = function(ML) {
 
 };
 
-},{"underscore":22}],10:[function(require,module,exports){
+},{"underscore":23}],11:[function(require,module,exports){
 (function (process){
 'use strict';
 var _ = require('underscore');
@@ -3684,7 +3720,7 @@ Promise.prototype.finally = Promise.prototype.always;
 Promise.prototype.try = Promise.prototype.done;
 
 }).call(this,require("1YiZ5S"))
-},{"1YiZ5S":18,"underscore":22}],11:[function(require,module,exports){
+},{"1YiZ5S":19,"underscore":23}],12:[function(require,module,exports){
 'use strict';
 
 var _ = require('underscore');
@@ -4619,7 +4655,7 @@ module.exports = function(ML) {
    });
 };
 
-},{"underscore":22}],12:[function(require,module,exports){
+},{"underscore":23}],13:[function(require,module,exports){
 'use strict';
 var _ = require('underscore');
 
@@ -4736,7 +4772,7 @@ module.exports = function(ML) {
   };
 };
 
-},{"underscore":22}],13:[function(require,module,exports){
+},{"underscore":23}],14:[function(require,module,exports){
 'use strict';
 
 module.exports = function(){
@@ -4756,7 +4792,7 @@ module.exports = function(){
     get: get
   }
 };
-},{"tiny-cookie":21}],14:[function(require,module,exports){
+},{"tiny-cookie":22}],15:[function(require,module,exports){
 'use strict';
 
 var _ = require('underscore');
@@ -5775,7 +5811,7 @@ module.exports = function(ML) {
   });
 };
 
-},{"underscore":22}],15:[function(require,module,exports){
+},{"underscore":23}],16:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -6472,12 +6508,12 @@ module.exports = function (ML) {
 };
 
 }).call(this,require("1YiZ5S"))
-},{"1YiZ5S":18,"underscore":22}],16:[function(require,module,exports){
+},{"1YiZ5S":19,"underscore":23}],17:[function(require,module,exports){
 'use strict';
 
 module.exports = "v2.0.4";
 
-},{}],17:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 'use strict';
 
 var _ = require('underscore');
@@ -6685,7 +6721,7 @@ module.exports = function(ML) {
 
 };
 
-},{"underscore":22}],18:[function(require,module,exports){
+},{"underscore":23}],19:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -6750,7 +6786,7 @@ process.chdir = function (dir) {
     throw new Error('process.chdir is not supported');
 };
 
-},{}],19:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 (function (global){
 // http://www.rajdeepd.com/articles/chrome/localstrg/LocalStorageSample.htm
 
@@ -6808,7 +6844,7 @@ process.chdir = function (dir) {
 }());
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],20:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 //     uuid.js
 //
 //     Copyright (c) 2010-2012 Robert Kieffer
@@ -7057,7 +7093,7 @@ process.chdir = function (dir) {
   }
 }).call(this);
 
-},{}],21:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 /*!
  * tiny-cookie - A tiny cookie manipulation plugin
  * https://github.com/Alex1990/tiny-cookie
@@ -7203,7 +7239,7 @@ process.chdir = function (dir) {
 
 }));
 
-},{}],22:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 //     Underscore.js 1.8.3
 //     http://underscorejs.org
 //     (c) 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
@@ -8753,7 +8789,7 @@ process.chdir = function (dir) {
   }
 }.call(this));
 
-},{}],23:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 "use strict";
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -8975,7 +9011,7 @@ var Detector = function () {
 }();
 
 module.exports = Detector;
-},{}],24:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 "use strict";
 
 require('es5-shim');
@@ -9086,7 +9122,7 @@ function WebParse(ua) {
 var Tan = WebParse(ua);
 Tan.parse = WebParse;
 module.exports = Tan;
-},{"./detector.js":23,"./web-rules.js":25,"es5-shim":26}],25:[function(require,module,exports){
+},{"./detector.js":24,"./web-rules.js":26,"es5-shim":27}],26:[function(require,module,exports){
 (function (global){
 "use strict";
 
@@ -9402,7 +9438,7 @@ module.exports = {
   re_msie: re_msie
 };
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],26:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 /*!
  * https://github.com/es-shims/es5-shim
  * @license es5-shim Copyright 2009-2015 by contributors, MIT License
@@ -11455,4 +11491,438 @@ if (String(/a/mig) !== '/a/gim') {
 
 }));
 
-},{}]},{},[5])
+},{}],28:[function(require,module,exports){
+(function(self) {
+  'use strict';
+  if (self.fetch) {
+    return
+  }
+
+  var support = {
+    searchParams: 'URLSearchParams' in self,
+    iterable: 'Symbol' in self && 'iterator' in Symbol,
+    blob: 'FileReader' in self && 'Blob' in self && (function() {
+      try {
+        new Blob()
+        return true
+      } catch(e) {
+        return false
+      }
+    })(),
+    formData: 'FormData' in self,
+    arrayBuffer: 'ArrayBuffer' in self
+  }
+
+  function normalizeName(name) {
+    if (typeof name !== 'string') {
+      name = String(name)
+    }
+    if (/[^a-z0-9\-#$%&'*+.\^_`|~]/i.test(name)) {
+      throw new TypeError('Invalid character in header field name')
+    }
+    return name.toLowerCase()
+  }
+
+  function normalizeValue(value) {
+    if (typeof value !== 'string') {
+      value = String(value)
+    }
+    return value
+  }
+
+  // Build a destructive iterator for the value list
+  function iteratorFor(items) {
+    var iterator = {
+      next: function() {
+        var value = items.shift()
+        return {done: value === undefined, value: value}
+      }
+    }
+
+    if (support.iterable) {
+      iterator[Symbol.iterator] = function() {
+        return iterator
+      }
+    }
+
+    return iterator
+  }
+
+  function Headers(headers) {
+    this.map = {}
+
+    if (headers instanceof Headers) {
+      headers.forEach(function(value, name) {
+        this.append(name, value)
+      }, this)
+
+    } else if (headers) {
+      Object.getOwnPropertyNames(headers).forEach(function(name) {
+        this.append(name, headers[name])
+      }, this)
+    }
+  }
+
+  Headers.prototype.append = function(name, value) {
+    name = normalizeName(name)
+    value = normalizeValue(value)
+    var list = this.map[name]
+    if (!list) {
+      list = []
+      this.map[name] = list
+    }
+    list.push(value)
+  }
+
+  Headers.prototype['delete'] = function(name) {
+    delete this.map[normalizeName(name)]
+  }
+
+  Headers.prototype.get = function(name) {
+    var values = this.map[normalizeName(name)]
+    return values ? values[0] : null
+  }
+
+  Headers.prototype.getAll = function(name) {
+    return this.map[normalizeName(name)] || []
+  }
+
+  Headers.prototype.has = function(name) {
+    return this.map.hasOwnProperty(normalizeName(name))
+  }
+
+  Headers.prototype.set = function(name, value) {
+    this.map[normalizeName(name)] = [normalizeValue(value)]
+  }
+
+  Headers.prototype.forEach = function(callback, thisArg) {
+    Object.getOwnPropertyNames(this.map).forEach(function(name) {
+      this.map[name].forEach(function(value) {
+        callback.call(thisArg, value, name, this)
+      }, this)
+    }, this)
+  }
+
+  Headers.prototype.keys = function() {
+    var items = []
+    this.forEach(function(value, name) { items.push(name) })
+    return iteratorFor(items)
+  }
+
+  Headers.prototype.values = function() {
+    var items = []
+    this.forEach(function(value) { items.push(value) })
+    return iteratorFor(items)
+  }
+
+  Headers.prototype.entries = function() {
+    var items = []
+    this.forEach(function(value, name) { items.push([name, value]) })
+    return iteratorFor(items)
+  }
+
+  if (support.iterable) {
+    Headers.prototype[Symbol.iterator] = Headers.prototype.entries
+  }
+
+  function consumed(body) {
+    if (body.bodyUsed) {
+      return Promise.reject(new TypeError('Already read'))
+    }
+    body.bodyUsed = true
+  }
+
+  function fileReaderReady(reader) {
+    return new Promise(function(resolve, reject) {
+      reader.onload = function() {
+        resolve(reader.result)
+      }
+      reader.onerror = function() {
+        reject(reader.error)
+      }
+    })
+  }
+
+  function readBlobAsArrayBuffer(blob) {
+    var reader = new FileReader()
+    reader.readAsArrayBuffer(blob)
+    return fileReaderReady(reader)
+  }
+
+  function readBlobAsText(blob) {
+    var reader = new FileReader()
+    reader.readAsText(blob)
+    return fileReaderReady(reader)
+  }
+
+  function Body() {
+    this.bodyUsed = false
+
+    this._initBody = function(body) {
+      this._bodyInit = body
+      if (typeof body === 'string') {
+        this._bodyText = body
+      } else if (support.blob && Blob.prototype.isPrototypeOf(body)) {
+        this._bodyBlob = body
+      } else if (support.formData && FormData.prototype.isPrototypeOf(body)) {
+        this._bodyFormData = body
+      } else if (support.searchParams && URLSearchParams.prototype.isPrototypeOf(body)) {
+        this._bodyText = body.toString()
+      } else if (!body) {
+        this._bodyText = ''
+      } else if (support.arrayBuffer && ArrayBuffer.prototype.isPrototypeOf(body)) {
+        // Only support ArrayBuffers for POST method.
+        // Receiving ArrayBuffers happens via Blobs, instead.
+      } else {
+        throw new Error('unsupported BodyInit type')
+      }
+
+      if (!this.headers.get('content-type')) {
+        if (typeof body === 'string') {
+          this.headers.set('content-type', 'text/plain;charset=UTF-8')
+        } else if (this._bodyBlob && this._bodyBlob.type) {
+          this.headers.set('content-type', this._bodyBlob.type)
+        } else if (support.searchParams && URLSearchParams.prototype.isPrototypeOf(body)) {
+          this.headers.set('content-type', 'application/x-www-form-urlencoded;charset=UTF-8')
+        }
+      }
+    }
+
+    if (support.blob) {
+      this.blob = function() {
+        var rejected = consumed(this)
+        if (rejected) {
+          return rejected
+        }
+
+        if (this._bodyBlob) {
+          return Promise.resolve(this._bodyBlob)
+        } else if (this._bodyFormData) {
+          throw new Error('could not read FormData body as blob')
+        } else {
+          return Promise.resolve(new Blob([this._bodyText]))
+        }
+      }
+
+      this.arrayBuffer = function() {
+        return this.blob().then(readBlobAsArrayBuffer)
+      }
+
+      this.text = function() {
+        var rejected = consumed(this)
+        if (rejected) {
+          return rejected
+        }
+
+        if (this._bodyBlob) {
+          return readBlobAsText(this._bodyBlob)
+        } else if (this._bodyFormData) {
+          throw new Error('could not read FormData body as text')
+        } else {
+          return Promise.resolve(this._bodyText)
+        }
+      }
+    } else {
+      this.text = function() {
+        var rejected = consumed(this)
+        return rejected ? rejected : Promise.resolve(this._bodyText)
+      }
+    }
+
+    if (support.formData) {
+      this.formData = function() {
+        return this.text().then(decode)
+      }
+    }
+
+    this.json = function() {
+      return this.text().then(JSON.parse)
+    }
+
+    return this
+  }
+
+  // HTTP methods whose capitalization should be normalized
+  var methods = ['DELETE', 'GET', 'HEAD', 'OPTIONS', 'POST', 'PUT']
+
+  function normalizeMethod(method) {
+    var upcased = method.toUpperCase()
+    return (methods.indexOf(upcased) > -1) ? upcased : method
+  }
+
+  function Request(input, options) {
+    options = options || {}
+    var body = options.body
+    if (Request.prototype.isPrototypeOf(input)) {
+      if (input.bodyUsed) {
+        throw new TypeError('Already read')
+      }
+      this.url = input.url
+      this.credentials = input.credentials
+      if (!options.headers) {
+        this.headers = new Headers(input.headers)
+      }
+      this.method = input.method
+      this.mode = input.mode
+      if (!body) {
+        body = input._bodyInit
+        input.bodyUsed = true
+      }
+    } else {
+      this.url = input
+    }
+
+    this.credentials = options.credentials || this.credentials || 'omit'
+    if (options.headers || !this.headers) {
+      this.headers = new Headers(options.headers)
+    }
+    this.method = normalizeMethod(options.method || this.method || 'GET')
+    this.mode = options.mode || this.mode || null
+    this.referrer = null
+
+    if ((this.method === 'GET' || this.method === 'HEAD') && body) {
+      throw new TypeError('Body not allowed for GET or HEAD requests')
+    }
+    this._initBody(body)
+  }
+
+  Request.prototype.clone = function() {
+    return new Request(this)
+  }
+
+  function decode(body) {
+    var form = new FormData()
+    body.trim().split('&').forEach(function(bytes) {
+      if (bytes) {
+        var split = bytes.split('=')
+        var name = split.shift().replace(/\+/g, ' ')
+        var value = split.join('=').replace(/\+/g, ' ')
+        form.append(decodeURIComponent(name), decodeURIComponent(value))
+      }
+    })
+    return form
+  }
+
+  function headers(xhr) {
+    var head = new Headers()
+    var pairs = (xhr.getAllResponseHeaders() || '').trim().split('\n')
+    pairs.forEach(function(header) {
+      var split = header.trim().split(':')
+      var key = split.shift().trim()
+      var value = split.join(':').trim()
+      head.append(key, value)
+    })
+    return head
+  }
+
+  Body.call(Request.prototype)
+
+  function Response(bodyInit, options) {
+    if (!options) {
+      options = {}
+    }
+
+    this.type = 'default'
+    this.status = options.status
+    this.ok = this.status >= 200 && this.status < 300
+    this.statusText = options.statusText
+    this.headers = options.headers instanceof Headers ? options.headers : new Headers(options.headers)
+    this.url = options.url || ''
+    this._initBody(bodyInit)
+  }
+
+  Body.call(Response.prototype)
+
+  Response.prototype.clone = function() {
+    return new Response(this._bodyInit, {
+      status: this.status,
+      statusText: this.statusText,
+      headers: new Headers(this.headers),
+      url: this.url
+    })
+  }
+
+  Response.error = function() {
+    var response = new Response(null, {status: 0, statusText: ''})
+    response.type = 'error'
+    return response
+  }
+
+  var redirectStatuses = [301, 302, 303, 307, 308]
+
+  Response.redirect = function(url, status) {
+    if (redirectStatuses.indexOf(status) === -1) {
+      throw new RangeError('Invalid status code')
+    }
+
+    return new Response(null, {status: status, headers: {location: url}})
+  }
+
+  self.Headers = Headers
+  self.Request = Request
+  self.Response = Response
+
+  self.fetch = function(input, init) {
+    return new Promise(function(resolve, reject) {
+      var request
+      if (Request.prototype.isPrototypeOf(input) && !init) {
+        request = input
+      } else {
+        request = new Request(input, init)
+      }
+
+      var xhr = new XMLHttpRequest()
+
+      function responseURL() {
+        if ('responseURL' in xhr) {
+          return xhr.responseURL
+        }
+
+        // Avoid security warnings on getResponseHeader when not allowed by CORS
+        if (/^X-Request-URL:/m.test(xhr.getAllResponseHeaders())) {
+          return xhr.getResponseHeader('X-Request-URL')
+        }
+
+        return
+      }
+
+      xhr.onload = function() {
+        var options = {
+          status: xhr.status,
+          statusText: xhr.statusText,
+          headers: headers(xhr),
+          url: responseURL()
+        }
+        var body = 'response' in xhr ? xhr.response : xhr.responseText
+        resolve(new Response(body, options))
+      }
+
+      xhr.onerror = function() {
+        reject(new TypeError('Network request failed'))
+      }
+
+      xhr.ontimeout = function() {
+        reject(new TypeError('Network request failed'))
+      }
+
+      xhr.open(request.method, request.url, true)
+
+      if (request.credentials === 'include') {
+        xhr.withCredentials = true
+      }
+
+      if ('responseType' in xhr && support.blob) {
+        xhr.responseType = 'blob'
+      }
+
+      request.headers.forEach(function(value, name) {
+        xhr.setRequestHeader(name, value)
+      })
+
+      xhr.send(typeof request._bodyInit === 'undefined' ? null : request._bodyInit)
+    })
+  }
+  self.fetch.polyfill = true
+})(typeof self !== 'undefined' ? self : this);
+
+},{}]},{},[6])
