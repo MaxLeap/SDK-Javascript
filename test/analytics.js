@@ -1,6 +1,6 @@
 var appId = '572afb8a667a230001e5642a';
 var userId = '572aaf3c70c6760001495048';
-describe('Analytics', function () {
+describe.only('Analytics', function () {
   describe('#PageView', function(){
     it('should track page begin', function(done){
       var options = {
