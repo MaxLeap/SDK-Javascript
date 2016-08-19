@@ -8200,6 +8200,9 @@ var ML = ML || {}; ML["Timeline"] =
 	        this.UNKNOWN = '0,0';
 	        this.appId = props.appId;
 	        this.userId = props.userId;
+	
+	        //用户可以使用默认 server 地址, 也可以用自己的 server
+	        this.apiServer = props.apiServer || API_SERVER;
 	        this.installation = localStorage.getItem(ML_INSTALLATION_FLAG);
 	
 	        //如果用户第一次访问页面, 则设置标示放在 localStorage 中
@@ -8308,7 +8311,7 @@ var ML = ML || {}; ML["Timeline"] =
 	    }, {
 	        key: 'trackEvent',
 	        value: function trackEvent(params) {
-	            return fetch(API_SERVER + '/2.0/track/event', {
+	            return fetch(this.apiServer + '/2.0/track/event', {
 	                method: 'POST',
 	                headers: {
 	                    'X-ML-AppId': this.appId
