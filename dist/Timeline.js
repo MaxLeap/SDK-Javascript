@@ -174,6 +174,11 @@ var ML = ML || {}; ML["Timeline"] =
 	                distinct_id: _nodeUuid2.default.v4()
 	            }];
 	        }
+	
+	        /**
+	         * 追踪 Timeline 事件
+	         */
+	
 	    }, {
 	        key: 'trackEvent',
 	        value: function trackEvent(params) {

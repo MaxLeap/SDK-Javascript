@@ -12,7 +12,11 @@ describe('Timeline', ()=>{
                         _userId: USER_ID,
                         _eventType:5,
                         _userAgent: window.navigator.userAgent
-                    }
+                    },
+                    time: new Date().getTime(),
+                    event: 'CustomEvent',
+                    type: 'track',
+                    distinct_id: '6e87a18ac0ef4435807433211760ax12'
                 }
             ];
 
