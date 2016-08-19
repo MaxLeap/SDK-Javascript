@@ -1,12 +1,11 @@
-'use strict';
 
-const APP_ID = '572afb8a667a230001e5642a';
-const USER_ID = '572b003f70c6760001495087';
+var APP_ID = '572afb8a667a230001e5642a';
+var USER_ID = '572b003f70c6760001495087';
 
-describe('Timeline', ()=>{
-    describe('#TrackEvent', ()=>{
-        it('should track evnet', (done)=>{
-            let params = [
+describe('Timeline', function (){
+    describe('#TrackEvent', function(){
+        it('should track evnet', function(done){
+            var params = [
                 {
                     "properties":  {
                         _userId: USER_ID,
@@ -20,13 +19,13 @@ describe('Timeline', ()=>{
                 }
             ];
 
-            let timeline = new ML.Timeline({
+            var timeline = new ML.Timeline({
                 appId: APP_ID,
                 userId: USER_ID
             });
 
-            timeline.trackEvent(params).then(res=>{
-                console.log(res);
+            timeline.trackEvent(params).then(function(res){
+                expect(res.errorCode).to.be(0);
                 done();
             }).catch(done);
         })
