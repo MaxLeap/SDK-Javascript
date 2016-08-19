@@ -77,7 +77,13 @@ var ML = ML || {}; ML["Timeline"] =
 	var API_SERVER = 'https://apiuat.maxleap.cn';
 	var ML_INSTALLATION_FLAG = 'ML_INSTALLATION_FLAG';
 	
+	/** Timeline 事件数据收集 */
+	
 	var Timeline = function () {
+	    /**
+	     * 实例化 Timeline
+	     * @param {object} props - 创建 Timeline 对象需要 appId, userId
+	     */
 	    function Timeline(props) {
 	        _classCallCheck(this, Timeline);
 	
@@ -95,6 +101,7 @@ var ML = ML || {}; ML["Timeline"] =
 	
 	    /**
 	     * 页面初始化时自动收集信息
+	     * @private
 	     */
 	
 	
@@ -107,6 +114,7 @@ var ML = ML || {}; ML["Timeline"] =
 	
 	        /**
 	         * Session 是一个用户行为的完整周期
+	         * @private
 	         */
 	
 	    }, {
@@ -122,6 +130,7 @@ var ML = ML || {}; ML["Timeline"] =
 	
 	        /**
 	         * SessionStart 是用户开始的瞬时行为
+	         * @private
 	         */
 	
 	    }, {
@@ -137,6 +146,7 @@ var ML = ML || {}; ML["Timeline"] =
 	
 	        /**
 	         * SDK 会自动收集一些字段
+	         * @param {object} params - 覆盖默认字段
 	         */
 	
 	    }, {
@@ -164,7 +174,7 @@ var ML = ML || {}; ML["Timeline"] =
 	                    national: this.UNKNOWN,
 	                    network: this.UNKNOWN,
 	                    appVersion: this.UNKNOWN,
-	                    sdkVersion: '2.0.4',
+	                    sdkVersion: '2.1.0',
 	                    push: false,
 	                    channel: this.UNKNOWN
 	                },
@@ -177,6 +187,7 @@ var ML = ML || {}; ML["Timeline"] =
 	
 	        /**
 	         * 追踪 Timeline 事件
+	         * @param {object} params - 发送事件参数
 	         */
 	
 	    }, {

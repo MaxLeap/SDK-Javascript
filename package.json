@@ -1,6 +1,6 @@
 {
   "name": "maxleap-js-sdk",
-  "version": "2.0.4",
+  "version": "2.1.0",
   "main": "./lib/ml.js",
   "description": "MaxLeap JavaScript SDK.",
   "repository": {
@@ -9,7 +9,8 @@
   },
   "scripts": {
     "webpack-watch": "webpack --progress --colors --watch",
-    "webpack-prod": "rm ./dist/timeline.js.map || true && NODE_ENV=production webpack -p --progress --colors"
+    "webpack-prod": "rm ./dist/Timeline.js.map || true && NODE_ENV=production webpack -p --progress --colors",
+    "doc": "jsdoc ./lib/ -d ./api-docs/v2.1.0"
   },
   "dependencies": {
     "detector": "^2.4.5",
@@ -42,6 +43,7 @@
     "gulp-shell": "^0.2.11",
     "gulp-tar": "^1.3.2",
     "gulp-uglify": "^1.0.2",
+    "jsdoc": "^3.4.0",
     "mocha": "1.9.0",
     "vinyl-source-stream": "^1.1.0",
     "webpack": "^1.13.2",
