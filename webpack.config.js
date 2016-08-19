@@ -19,7 +19,7 @@ let getEntry =()=>{
     let modules = ['Timeline'];
     let entry = {};
     modules.forEach((key)=>{
-        entry[key] = [`${PATHS.app}/${key}.js`];
+        entry[key] = ['babel-polyfill', `${PATHS.app}/${key}.js`];
     });
     return entry;
 };
