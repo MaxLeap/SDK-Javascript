@@ -44,7 +44,8 @@
     "gulp-uglify": "^1.0.2",
     "mocha": "1.9.0",
     "vinyl-source-stream": "^1.1.0",
-    "webpack": "^1.13.2"
+    "webpack": "^1.13.2",
+    "whatwg-fetch": "^1.0.0"
   },
   "license": "MIT",
   "author": {
