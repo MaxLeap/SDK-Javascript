@@ -10,7 +10,7 @@
   "scripts": {
     "webpack-watch": "webpack --progress --colors --watch",
     "webpack-prod": "rm ./dist/Timeline.js.map || true && NODE_ENV=production webpack -p --progress --colors",
-    "doc": "jsdoc ./lib/ -d ./api-docs/v2.1.0"
+    "jsdoc": "jsdoc ./lib/ -d ./api-docs/v2.1.0"
   },
   "dependencies": {
     "detector": "^2.4.5",

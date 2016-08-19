@@ -10,9 +10,13 @@ const PATHS = {
 };
 
 let devtool = 'source-map';
+let min = '';
 
 if(process.env.NODE_ENV === 'production'){
+    //发布产品时不使用devtool
     devtool = '';
+    //发布产品时文件名带.min后缀
+    min = '.min';
 }
 
 let getEntry =()=>{
@@ -29,7 +33,7 @@ module.exports = {
     entry: getEntry(),
     output: {
         path: PATHS.build,
-        filename: `[name].js`,
+        filename: `[name]${min}.js`,
         libraryTarget: 'var',
         library: ['ML',`[name]`]
     },
