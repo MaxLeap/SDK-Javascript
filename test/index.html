@@ -1,78 +1,36 @@
 <html>
 <head>
-  <title>Test</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="../node_modules/mocha/mocha.css" />
-  <script src="../node_modules/mocha/mocha.js"></script>
-  <script src="../node_modules/expect.js/expect.js"></script>
+    <title>Test</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../node_modules/mocha/mocha.css" />
+    <script src="../node_modules/mocha/mocha.js"></script>
+    <script src="../node_modules/expect.js/expect.js"></script>
 
-  <!--ML Test init-->
+    <!--ML Test init-->
 
-  <script src="../dist/ml.js"></script>
+    <script src="../dist/ML.js"></script>
 
-  <script type="text/javascript">
-    mocha.setup('bdd');
-  </script>
-  <script>
-    //webuat kc5xcr80@www.bccto.me kc5xcr80@www.bccto.me
+    <script type="text/javascript">
+        mocha.setup('bdd');
+    </script>
+    <script>
+        //webuat kc5xcr80@www.bccto.me kc5xcr80@www.bccto.me
 
-    ML.initialize('572afb8a667a230001e5642a', 'MlpuX1ZRVDFqb3N1UGxTZGpsV0U3Zw');
-    ML.serverURL = 'https://apiuat.maxleap.cn/';
-  </script>
-  <script>
-    //maxleap.cn  thfgukqp@www.bccto.me  thfgukqp@www.bccto.me
-    //sessionToken: Ozk1OU7W9_B4HPMTDnHDPsM85tB3wRHlvxhWhHr-l5k
-    //appid, clientkey
-//    ML.initialize('56273907169e7d0001bd5c92', 'TXV4MFB2SFFQdVpPSjJKYnFtSVdlUQ');
-//    ML.useCNServer();
-  </script>
+        ML.initialize('572afb8a667a230001e5642a', 'MlpuX1ZRVDFqb3N1UGxTZGpsV0U3Zw', 'https://apiuat.maxleap.cn/');
+    </script>
 
-  <script src="user.js"></script>
-  <script src="object.js"></script>
-  <script src="cloudcode.js"></script>
-  <script src="geopoints.js"></script>
-  <script src="query.js"></script>
-  <script src="analytics.js"></script>
-  <script>
-    onload = function(){
-      mocha.run();
-    };
-  </script>
+    <script src="Object.js"></script>
+    <script>
+        onload = function(){
+            mocha.run();
+        };
+    </script>
 
 </head>
 <body>
 
 <div id="mocha"></div>
-
-<input type="file" id="photoFileUpload">
-<input type="button" id="fileUploadButton"/>
-<img id="avatarImg" />
-<script>
-
-  document.querySelector('#fileUploadButton').addEventListener('click', function(){
-    var fileUploadControl = document.querySelector("#photoFileUpload");
-    if (fileUploadControl.files.length > 0) {
-      var file = fileUploadControl.files[0];
-      var name = "avatar.png";
-      var mlFile = new ML.File(name, file);
-      mlFile.save().then(function(file){
-        document.querySelector('#avatarImg').src = file.url();
-        file.destroy();
-      });
-//      var Post = ML.Object.extend('Post');
-//      var myPost = new Post();
-//      myPost.set('title', 'post1');
-//      myPost.set('myfile', mlFile);
-//      myPost.save().then(function(res){
-//        console.log(res);
-//      });
-
-    }
-  });
-</script>
-
-
 
 </body>
 </html>

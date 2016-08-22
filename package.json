@@ -9,6 +9,7 @@
   },
   "scripts": {
     "webpack-watch": "webpack --progress --colors --watch",
+    "webpack-watch-ml": "webpack --progress --colors --watch --config webpack.ml.config.js",
     "webpack-prod": "rm ./dist/Timeline.js.map || true && NODE_ENV=production webpack -p --progress --colors",
     "jsdoc": "jsdoc ./lib/ -d ./api-docs/v2.1.0"
   },

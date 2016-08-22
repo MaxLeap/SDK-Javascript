@@ -20,7 +20,7 @@ if(process.env.NODE_ENV === 'production'){
 }
 
 let getEntry =()=>{
-    let modules = ['Timeline'];
+    let modules = ['ML'];
     let entry = {};
     modules.forEach((key)=>{
         entry[key] = [`${PATHS.app}/${key}.js`];
@@ -35,7 +35,7 @@ module.exports = {
         path: PATHS.build,
         filename: `[name]${min}.js`,
         libraryTarget: 'var',
-        library: ['ML',`[name]`]
+        library: [`[name]`]
     },
     plugins: [
         new webpack.DefinePlugin({
