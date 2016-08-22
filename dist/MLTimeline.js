@@ -8184,7 +8184,7 @@ var ML = ML || {}; ML["Timeline"] =
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
-	var API_SERVER = 'https://api.maxleap.cn';
+	var SERVER_URL = 'https://api.maxleap.cn';
 	var ML_INSTALLATION_FLAG = 'ML_INSTALLATION_FLAG';
 	
 	/** Timeline 事件数据收集 */
@@ -8202,7 +8202,7 @@ var ML = ML || {}; ML["Timeline"] =
 	        this.userId = props.userId;
 	
 	        //用户可以使用默认 server 地址, 也可以用自己的 server
-	        this.apiServer = props.apiServer || API_SERVER;
+	        this.serverURL = props.serverURL || ML.serverURL || SERVER_URL;
 	        this.installation = localStorage.getItem(ML_INSTALLATION_FLAG);
 	
 	        //如果用户第一次访问页面, 则设置标示放在 localStorage 中
@@ -8311,7 +8311,7 @@ var ML = ML || {}; ML["Timeline"] =
 	    }, {
 	        key: 'trackEvent',
 	        value: function trackEvent(params) {
-	            return fetch(this.apiServer + '/2.0/track/event', {
+	            return fetch(this.serverURL + '/2.0/track/event', {
 	                method: 'POST',
 	                headers: {
 	                    'X-ML-AppId': this.appId
@@ -11811,4 +11811,4 @@ var ML = ML || {}; ML["Timeline"] =
 
 /***/ }
 /******/ ]);
-//# sourceMappingURL=Timeline.js.map
+//# sourceMappingURL=MLTimeline.js.map

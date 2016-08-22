@@ -20,7 +20,7 @@ if(process.env.NODE_ENV === 'production'){
 }
 
 let getEntry =()=>{
-    let modules = ['Timeline'];
+    let modules = ['MLTimeline'];
     let entry = {};
     modules.forEach((key)=>{
         entry[key] = ['babel-polyfill', `${PATHS.app}/${key}.js`];
@@ -35,7 +35,7 @@ module.exports = {
         path: PATHS.build,
         filename: `[name]${min}.js`,
         libraryTarget: 'var',
-        library: ['ML',`[name]`]
+        library: ['ML',`Timeline`]
     },
     plugins: [
         new webpack.DefinePlugin({
