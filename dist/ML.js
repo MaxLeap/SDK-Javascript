@@ -64,6 +64,8 @@ var ML =
 	
 	__webpack_require__(4);
 	
+	__webpack_require__(5);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	exports.default = _MLConfig2.default;
@@ -589,26 +591,133 @@ var ML =
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
+	__webpack_require__(3);
+	
 	var _MLConfig = __webpack_require__(2);
 	
 	var _MLConfig2 = _interopRequireDefault(_MLConfig);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
+	/** MLObject */
 	var MLObject = function () {
-	    function MLObject() {
+	    /**
+	     * 根据 props 初始化 MLObject
+	     * @param {object} props
+	     */
+	    function MLObject(props) {
+	        var _this = this;
+	
 	        _classCallCheck(this, MLObject);
+	
+	        this._buildResult = function (res) {
+	            _this.id = res.objectId;
+	            return _this;
+	        };
+	
+	        this._cleanAttrs = function (object) {
+	            var attrs = ['objectId', 'createdAt', 'updatedAt'];
+	            var _iteratorNormalCompletion = true;
+	            var _didIteratorError = false;
+	            var _iteratorError = undefined;
+	
+	            try {
+	                for (var _iterator = object[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	                    var attr = _step.value;
+	
+	                    delete object[attr];
+	                }
+	            } catch (err) {
+	                _didIteratorError = true;
+	                _iteratorError = err;
+	            } finally {
+	                try {
+	                    if (!_iteratorNormalCompletion && _iterator.return) {
+	                        _iterator.return();
+	                    }
+	                } finally {
+	                    if (_didIteratorError) {
+	                        throw _iteratorError;
+	                    }
+	                }
+	            }
+	        };
+	
+	        this.attributes = props || {};
 	    }
 	
-	    _createClass(MLObject, null, [{
+	    /**
+	     * 创建 MLObject 子类
+	     * @param {string} className - 子类名
+	     * @param {object} protoProps - 实例属性
+	     * @param {object} staticProps - 静态属性
+	     * @returns {MLObject} {Child} - MLObject 子类
+	     */
+	
+	
+	    _createClass(MLObject, [{
+	        key: 'set',
+	        value: function set(key, value) {
+	            this.attributes[key] = value;
+	        }
+	    }, {
+	        key: 'get',
+	        value: function get(key) {
+	            return this.attributes[key];
+	        }
+	
+	        /**
+	         * 存储对象
+	         * @param attrs
+	         */
+	
+	    }, {
+	        key: 'save',
+	        value: function save(attrs) {
+	            for (var key in attrs) {
+	                this.set(key, attrs[key]);
+	            }
+	            return fetch(_MLConfig2.default.serverURL + '2.0/classes/' + this._className, {
+	                method: 'POST',
+	                headers: {
+	                    'Content-Type': 'application/json',
+	                    'X-ML-AppId': _MLConfig2.default.appId,
+	                    'X-ML-APIKey': _MLConfig2.default.restApiKey
+	                },
+	                body: JSON.stringify(this.attributes)
+	            }).then(function (res) {
+	                return res.json();
+	            }).then(this._buildResult);
+	        }
+	    }], [{
 	        key: 'extend',
-	        value: function extend(className) {
+	        value: function extend(className, protoProps, staticProps) {
 	            //User 是 ML 保留字段
 	            if (className === 'User') {
 	                className = '_User';
 	            }
+	
+	            var Child = function (_MLObject) {
+	                _inherits(Child, _MLObject);
+	
+	                function Child(props) {
+	                    _classCallCheck(this, Child);
+	
+	                    return _possibleConstructorReturn(this, Object.getPrototypeOf(Child).call(this, props));
+	                }
+	
+	                return Child;
+	            }(MLObject);
+	
+	            Child.prototype._className = className;
+	
+	            return Child;
 	        }
 	    }]);
 	
@@ -616,6 +725,125 @@ var ML =
 	}();
 	
 	_MLConfig2.default.Object = MLObject;
+	
+	exports.default = _MLConfig2.default;
+	module.exports = exports['default'];
+
+/***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	__webpack_require__(3);
+	
+	var _MLConfig = __webpack_require__(2);
+	
+	var _MLConfig2 = _interopRequireDefault(_MLConfig);
+	
+	var _MLObject = __webpack_require__(4);
+	
+	var _MLObject2 = _interopRequireDefault(_MLObject);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var MLQuery = function () {
+	    function MLQuery(objectClass) {
+	        var _this = this;
+	
+	        _classCallCheck(this, MLQuery);
+	
+	        this._request = function (params) {
+	            return fetch(_MLConfig2.default.serverURL + '2.0/classes/' + _this._className + '/query', {
+	                method: 'POST',
+	                headers: {
+	                    'Content-Type': 'application/json',
+	                    'X-ML-AppId': _MLConfig2.default.appId,
+	                    'X-ML-APIKey': _MLConfig2.default.restApiKey
+	                },
+	                body: JSON.stringify(params)
+	            }).then(function (res) {
+	                return res.json();
+	            }).then(_this._buildResult);
+	        };
+	
+	        this._buildResult = function (res) {
+	            return res.results.map(function (item) {
+	                var obj = new _this._objectClass(item);
+	                obj.id = obj.attributes.objectId;
+	                _this._cleanAttrs(obj);
+	                return obj;
+	            });
+	        };
+	
+	        this._cleanAttrs = function (object) {
+	            var attrs = ['createdAt', 'updatedAt'];
+	            var _iteratorNormalCompletion = true;
+	            var _didIteratorError = false;
+	            var _iteratorError = undefined;
+	
+	            try {
+	                for (var _iterator = attrs[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	                    var attr = _step.value;
+	
+	                    delete object.attributes[attr];
+	                }
+	            } catch (err) {
+	                _didIteratorError = true;
+	                _iteratorError = err;
+	            } finally {
+	                try {
+	                    if (!_iteratorNormalCompletion && _iterator.return) {
+	                        _iterator.return();
+	                    }
+	                } finally {
+	                    if (_didIteratorError) {
+	                        throw _iteratorError;
+	                    }
+	                }
+	            }
+	        };
+	
+	        this._where = {};
+	        this._limit = -1;
+	        this._skip = 0;
+	        this._objectClass = objectClass;
+	        this._className = objectClass.prototype._className;
+	    }
+	
+	    _createClass(MLQuery, [{
+	        key: 'get',
+	        value: function get(id) {
+	            console.log(id);
+	            var params = {};
+	            params.where = {
+	                objectId: id
+	            };
+	            return _request(params);
+	        }
+	    }, {
+	        key: 'first',
+	        value: function first() {
+	            return this._request({
+	                limit: 1
+	            }).then(function (res) {
+	                return res[0];
+	            });
+	        }
+	    }]);
+	
+	    return MLQuery;
+	}();
+	
+	_MLConfig2.default.Query = MLQuery;
 	
 	exports.default = _MLConfig2.default;
 	module.exports = exports['default'];
