@@ -8184,7 +8184,7 @@ var ML = ML || {}; ML["Timeline"] =
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
-	var API_SERVER = 'https://apiuat.maxleap.cn';
+	var API_SERVER = 'https://api.maxleap.cn';
 	var ML_INSTALLATION_FLAG = 'ML_INSTALLATION_FLAG';
 	
 	/** Timeline 事件数据收集 */

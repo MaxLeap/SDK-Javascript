@@ -2,6 +2,7 @@
 
 var APP_ID = '572afb8a667a230001e5642a';
 var USER_ID = '572b003f70c6760001495087';
+var API_SERVER = 'https://apiuat.maxleap.cn';
 
 describe('Timeline', function (){
     describe('#TrackEvent', function(){
@@ -22,7 +23,8 @@ describe('Timeline', function (){
 
             var timeline = new ML.Timeline({
                 appId: APP_ID,
-                userId: USER_ID
+                userId: USER_ID,
+                apiServer: API_SERVER
             });
 
             timeline.trackEvent(params).then(function(res){
