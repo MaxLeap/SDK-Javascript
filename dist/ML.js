@@ -58,11 +58,11 @@ var ML =
 	  value: true
 	});
 	
-	var _MLConfig = __webpack_require__(5);
+	var _MLConfig = __webpack_require__(2);
 	
 	var _MLConfig2 = _interopRequireDefault(_MLConfig);
 	
-	__webpack_require__(6);
+	__webpack_require__(4);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -70,7 +70,75 @@ var ML =
 	module.exports = exports['default'];
 
 /***/ },
-/* 2 */,
+/* 2 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	__webpack_require__(3);
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var SERVER_URL_CN = 'https://api.maxleap.cn/';
+	var SERVER_URL_EN = 'https://api.maxleap.com/';
+	
+	/** ML 静态对象 */
+	
+	var ML = function () {
+	    function ML() {
+	        _classCallCheck(this, ML);
+	    }
+	
+	    _createClass(ML, null, [{
+	        key: 'initialize',
+	
+	        /**
+	         * 初始化 ML
+	         * @param {string} appId - 应用 Id
+	         * @param {string} restAPIKey - 应用 REST API Key
+	         * @param {string} serverURL - API 服务器地址, 默认为中国区
+	         * @static
+	         */
+	        value: function initialize(appId, restAPIKey, serverURL) {
+	            ML.appId = appId;
+	            ML.restApiKey = restAPIKey;
+	            ML.serverURL = serverURL || SERVER_URL_CN;
+	        }
+	
+	        /**
+	         * 使用中国区服务器
+	         */
+	
+	    }, {
+	        key: 'useCNServer',
+	        value: function useCNServer() {
+	            ML.serverURL = SERVER_URL_CN;
+	        }
+	
+	        /**
+	         * 使用美国区服务器
+	         */
+	
+	    }, {
+	        key: 'useENServer',
+	        value: function useENServer() {
+	            ML.serverURL = SERVER_URL_EN;
+	        }
+	    }]);
+	
+	    return ML;
+	}();
+	
+	exports.default = ML;
+	module.exports = exports['default'];
+
+/***/ },
 /* 3 */
 /***/ function(module, exports) {
 
@@ -510,8 +578,7 @@ var ML =
 
 
 /***/ },
-/* 4 */,
-/* 5 */
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -522,76 +589,7 @@ var ML =
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	__webpack_require__(3);
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	var SERVER_URL_CN = 'https://api.maxleap.cn/';
-	var SERVER_URL_EN = 'https://api.maxleap.com/';
-	
-	/** ML 静态对象 */
-	
-	var ML = function () {
-	    function ML() {
-	        _classCallCheck(this, ML);
-	    }
-	
-	    _createClass(ML, null, [{
-	        key: 'initialize',
-	
-	        /**
-	         * 初始化 ML
-	         * @param {string} appId - 应用 Id
-	         * @param {string} restAPIKey - 应用 REST API Key
-	         * @param {string} serverURL - API 服务器地址, 默认为中国区
-	         * @static
-	         */
-	        value: function initialize(appId, restAPIKey, serverURL) {
-	            ML.appId = appId;
-	            ML.restApiKey = restAPIKey;
-	            ML.serverURL = serverURL || SERVER_URL_CN;
-	        }
-	
-	        /**
-	         * 使用中国区服务器
-	         */
-	
-	    }, {
-	        key: 'useCNServer',
-	        value: function useCNServer() {
-	            ML.serverURL = SERVER_URL_CN;
-	        }
-	
-	        /**
-	         * 使用美国区服务器
-	         */
-	
-	    }, {
-	        key: 'useENServer',
-	        value: function useENServer() {
-	            ML.serverURL = SERVER_URL_EN;
-	        }
-	    }]);
-	
-	    return ML;
-	}();
-	
-	exports.default = ML;
-	module.exports = exports['default'];
-
-/***/ },
-/* 6 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	var _MLConfig = __webpack_require__(5);
+	var _MLConfig = __webpack_require__(2);
 	
 	var _MLConfig2 = _interopRequireDefault(_MLConfig);
 	
@@ -606,7 +604,7 @@ var ML =
 	
 	    _createClass(MLObject, null, [{
 	        key: 'extend',
-	        value: function extend() {
+	        value: function extend(className) {
 	            //User 是 ML 保留字段
 	            if (className === 'User') {
 	                className = '_User';
