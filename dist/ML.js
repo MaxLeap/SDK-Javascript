@@ -650,6 +650,8 @@ var ML =
 	        };
 	
 	        this.attributes = props || {};
+	        this._batchRequest = [];
+	        this._opAddQueue = [];
 	    }
 	
 	    /**
@@ -680,6 +682,9 @@ var ML =
 	    }, {
 	        key: 'save',
 	        value: function save(attrs) {
+	
+	            this.deepSave();
+	
 	            for (var key in attrs) {
 	                this.set(key, attrs[key]);
 	            }
@@ -694,6 +699,36 @@ var ML =
 	            }).then(function (res) {
 	                return res.json();
 	            }).then(this._buildResult);
+	        }
+	    }, {
+	        key: 'deepSave',
+	        value: function deepSave() {
+	            var childKeys = Object.keys(this._opAddQueue);
+	
+	            if (childKeys.length) {
+	                return fetch(_MLConfig2.default.serverURL + '2.0/batch', {
+	                    method: 'POST',
+	                    headers: {
+	                        'Content-Type': 'application/json',
+	                        'X-ML-AppId': _MLConfig2.default.appId,
+	                        'X-ML-APIKey': _MLConfig2.default.restApiKey
+	                    },
+	                    body: JSON.stringify(this.attributes)
+	                }).then(function (res) {
+	                    return res.json();
+	                }).then(function (res) {
+	                    console.log(res);
+	                });
+	            }
+	        }
+	    }, {
+	        key: 'add',
+	        value: function add(key, value) {
+	            this._opAddQueue[key] = {
+	                body: value.attributes,
+	                method: 'POST',
+	                path: '/2.0/classes/' + value._className
+	            };
 	        }
 	    }, {
 	        key: 'fetch',
@@ -859,8 +894,7 @@ var ML =
 	        key: 'get',
 	        value: function get(id) {
 	            this._params.where['objectId'] = id;
-	            var params = this._createParams();
-	            return _request(params);
+	            return this.first();
 	        }
 	
 	        /**

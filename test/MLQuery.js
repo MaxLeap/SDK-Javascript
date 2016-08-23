@@ -3,7 +3,7 @@
 var Post = ML.Object.extend('Post');
 var Comment = ML.Object.extend('Comment');
 
-describe.only('查询', function(){
+describe('查询', function(){
     it('返回一个对象',function(done){
         var query = new ML.Query(Post);
         query.first().then(function(result){
