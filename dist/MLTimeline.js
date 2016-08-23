@@ -8282,6 +8282,7 @@ var ML = ML || {}; ML["Timeline"] =
 	                    _eventType: params._eventType,
 	                    _userId: this.userId,
 	                    _userAgent: window.navigator.userAgent,
+	                    _deviceModel: 'web',
 	                    uuid: _nodeUuid2.default.v4(),
 	                    deviceId: this.installation,
 	                    appUserId: this.appUserId, //_User表中的id, 由调用者传入

@@ -1,7 +1,7 @@
 'use strict';
 
 var APP_ID = '572afb8a667a230001e5642a';
-var USER_ID = '572b152c70c6760001495090';
+var USER_ID = '57b580feaa150a0001c6165e';
 var SERVER_URL = 'https://apiuat.maxleap.cn';
 
 describe('Timeline', function (){
