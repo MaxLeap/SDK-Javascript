@@ -1,12 +1,12 @@
 'use strict';
 
 var APP_ID = '572afb8a667a230001e5642a';
-var USER_ID = '572b003f70c6760001495087';
-var API_SERVER = 'https://apiuat.maxleap.cn';
+var USER_ID = '57b580feaa150a0001c6165e';
+var SERVER_URL = 'https://apiuat.maxleap.cn';
 
 describe('Timeline', function (){
-    describe('#TrackEvent', function(){
-        it('should track evnet', function(done){
+    describe('#事件追踪', function(){
+        it('自定义事件', function(done){
             var params = [
                 {
                     "properties":  {
@@ -24,7 +24,7 @@ describe('Timeline', function (){
             var timeline = new ML.Timeline({
                 appId: APP_ID,
                 userId: USER_ID,
-                apiServer: API_SERVER
+                serverURL: SERVER_URL
             });
 
             timeline.trackEvent(params).then(function(res){

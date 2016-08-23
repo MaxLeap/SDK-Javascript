@@ -1,6 +1,6 @@
 {
   "name": "maxleap-js-sdk",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "main": "./lib/ml.js",
   "description": "MaxLeap JavaScript SDK.",
   "repository": {
@@ -10,8 +10,9 @@
   "scripts": {
     "webpack-watch": "webpack --progress --colors --watch",
     "webpack-watch-ml": "webpack --progress --colors --watch --config webpack.ml.config.js",
-    "webpack-prod": "rm ./dist/Timeline.js.map || true && NODE_ENV=production webpack -p --progress --colors",
-    "jsdoc": "jsdoc ./lib/ -d ./api-docs/v2.1.0"
+    "webpack-uat": "rm ./dist/MLTimeline.js.map || true && webpack --progress --colors",
+    "webpack-prod": "rm ./dist/MLTimeline.js.map || true && NODE_ENV=production webpack -p --progress --colors",
+    "jsdoc": "jsdoc ./lib/ -d ./api-docs/v${npm_package_version}"
   },
   "dependencies": {
     "detector": "^2.4.5",
