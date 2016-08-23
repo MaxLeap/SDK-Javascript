@@ -32,18 +32,18 @@ gulp.task('compress-scripts', ['uglify'], function() {
     .pipe(gulp.dest('dist'));
 });
 
-gulp.task('docs', $.shell.task([
-  'mkdir -p '+apiDocsDir,
-  'JSDOCDIR=tools/jsdoc-toolkit/ sh tools/jsdoc-toolkit/jsrun.sh -d='+apiDocsDir+' -t=tools/jsdoc-toolkit/templates/jsdoc dist/ml.js'
-]));
+// gulp.task('docs', $.shell.task([
+//   'mkdir -p '+apiDocsDir,
+//   'JSDOCDIR=tools/jsdoc-toolkit/ sh tools/jsdoc-toolkit/jsrun.sh -d='+apiDocsDir+' -t=tools/jsdoc-toolkit/templates/jsdoc dist/ml.js'
+// ]));
 
-gulp.task('compress-docs', ['docs'], function() {
-  var version = getMLVersion();
-  return gulp.src(['dist/js-sdk-api-docs/**/*'])
-    .pipe($.tar('js-sdk-api-docs-' + version + '.tar'))
-    .pipe($.gzip())
-    .pipe(gulp.dest('dist'));
-});
+// gulp.task('compress-docs', ['docs'], function() {
+//   var version = getMLVersion();
+//   return gulp.src(['dist/js-sdk-api-docs/**/*'])
+//     .pipe($.tar('js-sdk-api-docs-' + version + '.tar'))
+//     .pipe($.gzip())
+//     .pipe(gulp.dest('dist'));
+// });
 
 gulp.task('clean', function() {
   return gulp.src(['dist', apiDocsDir], {read: false})
@@ -54,8 +54,8 @@ gulp.task('release', ['clean'], function(){
   gulp.start([
     'browserify',
     'uglify',
-    'compress-scripts',
-    'docs',
-    'compress-docs'
+    // 'compress-scripts',
+    // 'docs',
+    // 'compress-docs'
   ]);
 });
