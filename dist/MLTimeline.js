@@ -8186,6 +8186,7 @@ var ML = ML || {}; ML["Timeline"] =
 	
 	var SERVER_URL = 'https://api.maxleap.cn';
 	var ML_INSTALLATION_FLAG = 'ML_INSTALLATION_FLAG';
+	var ML_INSTALLATION_TIME = 'ML_INSTALLATION_TIME';
 	
 	/** Timeline 事件数据收集 */
 	
@@ -8204,12 +8205,18 @@ var ML = ML || {}; ML["Timeline"] =
 	        //用户可以使用默认 server 地址, 也可以用自己的 server
 	        this.serverURL = props.serverURL || ML.serverURL || SERVER_URL;
 	        this.installation = localStorage.getItem(ML_INSTALLATION_FLAG);
+	        this.installationTime = localStorage.getItem(ML_INSTALLATION_TIME);
 	
 	        //如果用户第一次访问页面, 则设置标示放在 localStorage 中
 	        if (!this.installation) {
 	            try {
 	                //safari 的隐身模式不允许设置 localStorage
-	                localStorage.setItem(ML_INSTALLATION_FLAG, _nodeUuid2.default.v4());
+	                var mlInstallationFlag = _nodeUuid2.default.v4();
+	                var mlInstallationTime = new Date().getTime();
+	                this.installation = mlInstallationFlag;
+	                this.installationTime = mlInstallationTime;
+	                localStorage.setItem(ML_INSTALLATION_FLAG, mlInstallationFlag);
+	                localStorage.setItem(ML_INSTALLATION_TIME, mlInstallationTime);
 	            } catch (e) {
 	                console.warn('请关闭隐身模式');
 	            }
@@ -8280,7 +8287,7 @@ var ML = ML || {}; ML["Timeline"] =
 	                    appUserId: this.appUserId, //_User表中的id, 由调用者传入
 	                    appId: this.appId, //appId, 由调用者传入
 	                    startTime: new Date().getTime(),
-	                    userCreateTime: new Date().getTime(),
+	                    userCreateTime: Number(this.installationTime),
 	                    duration: 0,
 	                    upgrade: false,
 	                    carrier: this.UNKNOWN,

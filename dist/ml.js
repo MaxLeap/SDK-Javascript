@@ -64,13 +64,13 @@ var ML =
 	 */
 	
 	global.ML = module.exports = {};
-	global.uuid = __webpack_require__(7);
-	ML._ = __webpack_require__(8);
-	ML.VERSION = __webpack_require__(9);
+	global.uuid = __webpack_require__(6);
+	ML._ = __webpack_require__(7);
+	ML.VERSION = __webpack_require__(8);
 	
-	ML.Promise = __webpack_require__(10);
-	ML.localStorage = __webpack_require__(12);
-	ML.store = __webpack_require__(13)();
+	ML.Promise = __webpack_require__(9);
+	ML.localStorage = __webpack_require__(11);
+	ML.store = __webpack_require__(12)();
 	
 	ML.useCNServer = function () {
 	  ML.serverURL = 'https://api.maxleap.cn/';
@@ -85,7 +85,8 @@ var ML =
 	ML.analyticsEnable = true;
 	
 	// The module order is important.
-	__webpack_require__(15)(ML);
+	__webpack_require__(14)(ML);
+	__webpack_require__(19)(ML);
 	__webpack_require__(20)(ML);
 	__webpack_require__(21)(ML);
 	__webpack_require__(22)(ML);
@@ -98,7 +99,6 @@ var ML =
 	__webpack_require__(29)(ML);
 	__webpack_require__(30)(ML);
 	__webpack_require__(31)(ML);
-	__webpack_require__(32)(ML);
 	
 	ML.ML = ML;
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
@@ -546,8 +546,7 @@ var ML =
 /***/ },
 /* 4 */,
 /* 5 */,
-/* 6 */,
-/* 7 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;//     uuid.js
@@ -800,7 +799,7 @@ var ML =
 
 
 /***/ },
-/* 8 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;//     Underscore.js 1.8.3
@@ -2354,7 +2353,7 @@ var ML =
 
 
 /***/ },
-/* 9 */
+/* 8 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -2362,12 +2361,12 @@ var ML =
 	module.exports = "v2.0.4";
 
 /***/ },
-/* 10 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 	
-	var _ = __webpack_require__(8);
+	var _ = __webpack_require__(7);
 	
 	var Promise = module.exports = function Promise(fn) {
 	  /**
@@ -2953,10 +2952,10 @@ var ML =
 	 * @see ML.Promise#done
 	 */
 	Promise.prototype.try = Promise.prototype.done;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(11)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10)))
 
 /***/ },
-/* 11 */
+/* 10 */
 /***/ function(module, exports) {
 
 	// shim for using process in browser
@@ -3122,7 +3121,7 @@ var ML =
 
 
 /***/ },
-/* 12 */
+/* 11 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {// http://www.rajdeepd.com/articles/chrome/localstrg/LocalStorageSample.htm
@@ -3183,14 +3182,14 @@ var ML =
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 13 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	module.exports = function () {
 	
-	  var cookie = __webpack_require__(14);
+	  var cookie = __webpack_require__(13);
 	
 	  function set(key, value, options) {
 	    cookie.set(key, value, options);
@@ -3207,7 +3206,7 @@ var ML =
 	};
 
 /***/ },
-/* 14 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -3357,17 +3356,17 @@ var ML =
 
 
 /***/ },
-/* 15 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var _ = __webpack_require__(8);
+	var _ = __webpack_require__(7);
 	
 	module.exports = function (ML) {
 	
 	  ML.Detector = function () {
-	    this.detector = __webpack_require__(16);
+	    this.detector = __webpack_require__(15);
 	  };
 	
 	  _.extend(ML.Detector.prototype, {
@@ -3405,15 +3404,15 @@ var ML =
 	};
 
 /***/ },
-/* 16 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	__webpack_require__(17);
+	__webpack_require__(16);
 	
-	var Detector = __webpack_require__(18);
-	var WebRules = __webpack_require__(19);
+	var Detector = __webpack_require__(17);
+	var WebRules = __webpack_require__(18);
 	
 	var userAgent = navigator.userAgent || "";
 	//const platform = navigator.platform || "";
@@ -3520,7 +3519,7 @@ var ML =
 	module.exports = Tan;
 
 /***/ },
-/* 17 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -5577,7 +5576,7 @@ var ML =
 
 
 /***/ },
-/* 18 */
+/* 17 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -5803,7 +5802,7 @@ var ML =
 	module.exports = Detector;
 
 /***/ },
-/* 19 */
+/* 18 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {"use strict";
@@ -6122,12 +6121,12 @@ var ML =
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 20 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 	
-	var _ = __webpack_require__(8);
+	var _ = __webpack_require__(7);
 	
 	/*global _: false, $: false, localStorage: false, process: true,
 	 XMLHttpRequest: false, XDomainRequest: false, exports: false,
@@ -6765,15 +6764,15 @@ var ML =
 	    return ML._.isNull(x) || ML._.isUndefined(x);
 	  };
 	};
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(11)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10)))
 
 /***/ },
-/* 21 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var _ = __webpack_require__(8);
+	var _ = __webpack_require__(7);
 	
 	module.exports = function (ML) {
 	
@@ -7125,7 +7124,7 @@ var ML =
 	};
 
 /***/ },
-/* 22 */
+/* 21 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -7283,12 +7282,12 @@ var ML =
 	};
 
 /***/ },
-/* 23 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var _ = __webpack_require__(8);
+	var _ = __webpack_require__(7);
 	
 	/*global navigator: false */
 	module.exports = function (ML) {
@@ -7459,12 +7458,12 @@ var ML =
 	};
 
 /***/ },
-/* 24 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var _ = __webpack_require__(8);
+	var _ = __webpack_require__(7);
 	
 	module.exports = function (ML) {
 	
@@ -7978,12 +7977,12 @@ var ML =
 	};
 
 /***/ },
-/* 25 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var _ = __webpack_require__(8);
+	var _ = __webpack_require__(7);
 	
 	module.exports = function (ML) {
 	  /**
@@ -8099,12 +8098,12 @@ var ML =
 	};
 
 /***/ },
-/* 26 */
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var _ = __webpack_require__(8);
+	var _ = __webpack_require__(7);
 	module.exports = function () {
 	
 	  /**
@@ -8169,12 +8168,12 @@ var ML =
 	};
 
 /***/ },
-/* 27 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var _ = __webpack_require__(8);
+	var _ = __webpack_require__(7);
 	
 	// ML.Object is analogous to the Java MLObject.
 	// It also implements the same interface as a Backbone model.
@@ -9630,12 +9629,12 @@ var ML =
 	};
 
 /***/ },
-/* 28 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var _ = __webpack_require__(8);
+	var _ = __webpack_require__(7);
 	__webpack_require__(3);
 	
 	module.exports = function () {
@@ -9670,12 +9669,12 @@ var ML =
 	};
 
 /***/ },
-/* 29 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var _ = __webpack_require__(8);
+	var _ = __webpack_require__(7);
 	
 	/*global _: false, document: false */
 	module.exports = function (ML) {
@@ -9880,12 +9879,12 @@ var ML =
 	};
 
 /***/ },
-/* 30 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var _ = __webpack_require__(8);
+	var _ = __webpack_require__(7);
 	
 	module.exports = function (ML) {
 	  /**
@@ -10866,12 +10865,12 @@ var ML =
 	};
 
 /***/ },
-/* 31 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var _ = __webpack_require__(8);
+	var _ = __webpack_require__(7);
 	
 	// ML.Query is a way to create a list of ML.Objects.
 	module.exports = function (ML) {
@@ -11793,12 +11792,12 @@ var ML =
 	};
 
 /***/ },
-/* 32 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var _ = __webpack_require__(8);
+	var _ = __webpack_require__(7);
 	module.exports = function (ML) {
 	  /**
 	   * ML.Analytics collects data of user actions and analytics it in MaxLeap.

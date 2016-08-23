@@ -5,8 +5,8 @@ var USER_ID = '572b152c70c6760001495090';
 var SERVER_URL = 'https://apiuat.maxleap.cn';
 
 describe('Timeline', function (){
-    describe('#TrackEvent', function(){
-        it('should track evnet', function(done){
+    describe('#事件追踪', function(){
+        it('自定义事件', function(done){
             var params = [
                 {
                     "properties":  {
