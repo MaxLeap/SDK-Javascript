@@ -772,7 +772,7 @@ var ML =
 	                body: JSON.stringify(params)
 	            }).then(function (res) {
 	                return res.json();
-	            }).then(_this._buildResult);
+	            });
 	        };
 	
 	        this._buildResult = function (res) {
@@ -822,7 +822,6 @@ var ML =
 	    _createClass(MLQuery, [{
 	        key: 'get',
 	        value: function get(id) {
-	            console.log(id);
 	            var params = {};
 	            params.where = {
 	                objectId: id
@@ -834,9 +833,113 @@ var ML =
 	        value: function first() {
 	            return this._request({
 	                limit: 1
-	            }).then(function (res) {
+	            }).then(this._buildResult).then(function (res) {
 	                return res[0];
 	            });
+	        }
+	    }, {
+	        key: 'find',
+	        value: function find() {
+	            var params = this._createParams();
+	            return this._request(params).then(this._buildResult);
+	        }
+	    }, {
+	        key: 'count',
+	        value: function count() {
+	            var params = this._createParams();
+	
+	            //仅当 limit 为 0 时, 服务器才不会返回实体数据
+	            params.limit = 0;
+	            //设置 count 为 1, 让服务器返回 count
+	            params.count = 1;
+	
+	            return this._request(params).then(function (res) {
+	                return res.count;
+	            });
+	        }
+	    }, {
+	        key: 'limit',
+	        value: function limit(n) {
+	            this._limit = n;
+	            return this;
+	        }
+	    }, {
+	        key: 'skip',
+	        value: function skip(n) {
+	            this._skip = n;
+	            return this;
+	        }
+	    }, {
+	        key: 'ascending',
+	        value: function ascending(key) {
+	            this._order = key;
+	            return this;
+	        }
+	    }, {
+	        key: 'descending',
+	        value: function descending(key) {
+	            this._order = '-' + key;
+	            return this;
+	        }
+	    }, {
+	        key: 'exists',
+	        value: function exists(key) {
+	            if (key === 'objectId') {
+	                console.warn('objectId 一定会存在, 不能作为 exists 条件');
+	            }
+	            this._where[key] = { $exists: true };
+	            return this;
+	        }
+	    }, {
+	        key: 'doesNotExist',
+	        value: function doesNotExist(key) {
+	            if (key === 'objectId') {
+	                console.warn('objectId 一定会存在, 不能作为 exists 条件');
+	            }
+	            this._where[key] = { $exists: false };
+	            return this;
+	        }
+	    }, {
+	        key: 'equalTo',
+	        value: function equalTo(key, value) {
+	            this._where[key] = value;
+	            return this;
+	        }
+	    }, {
+	        key: 'notEqualTo',
+	        value: function notEqualTo(key, value) {
+	            this._where[key] = { $ne: value };
+	            return this;
+	        }
+	    }, {
+	        key: 'greaterThan',
+	        value: function greaterThan(key, value) {
+	            this._where[key] = { $gt: value };
+	            return this;
+	        }
+	    }, {
+	        key: 'lessThan',
+	        value: function lessThan(key, value) {
+	            this._where[key] = { $lt: value };
+	            return this;
+	        }
+	    }, {
+	        key: '_createParams',
+	        value: function _createParams() {
+	            var params = {
+	                where: this._where
+	            };
+	
+	            if (this._limit >= 0) {
+	                params.limit = this._limit;
+	            }
+	            if (this._skip > 0) {
+	                params.skip = this._skip;
+	            }
+	            if (this._order !== undefined) {
+	                params.order = this._order;
+	            }
+	            return params;
 	        }
 	    }]);
 	
