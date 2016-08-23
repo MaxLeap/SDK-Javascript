@@ -30,11 +30,15 @@ describe('查询', function(){
     it.only('条件查询', function(done){
         var query = new ML.Query(Post);
         query.limit(10);
+        query.skip(1);
         // query.exists('content');
         // query.doesNotExist('title');
         // query.equalTo('objectId', '57babf7daa150a0001d09bd8');
-        query.notEqualTo('objectId', '57babf7daa150a0001d09bd8');
+        // query.notEqualTo('objectId', '57babf7daa150a0001d09bd8');
+        // query.greaterThan('score', 7);
+        // query.select('title', 'content');
         query.find().then(function(results){
+            console.log(results);
             expect(results).to.be.an('array');
             done();
         }).catch(done);

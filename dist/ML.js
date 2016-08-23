@@ -817,6 +817,7 @@ var ML =
 	        this._skip = 0;
 	        this._objectClass = objectClass;
 	        this._className = objectClass.prototype._className;
+	        this._params = {};
 	    }
 	
 	    _createClass(MLQuery, [{
@@ -860,19 +861,19 @@ var ML =
 	    }, {
 	        key: 'limit',
 	        value: function limit(n) {
-	            this._limit = n;
+	            this._params.limit = n;
 	            return this;
 	        }
 	    }, {
 	        key: 'skip',
 	        value: function skip(n) {
-	            this._skip = n;
+	            this._params.skip = n;
 	            return this;
 	        }
 	    }, {
 	        key: 'ascending',
 	        value: function ascending(key) {
-	            this._order = key;
+	            this._params.order = key;
 	            return this;
 	        }
 	    }, {
@@ -924,22 +925,41 @@ var ML =
 	            return this;
 	        }
 	    }, {
+	        key: 'greaterThanOrEqualTo',
+	        value: function greaterThanOrEqualTo(key, value) {
+	            this._where[key] = { $gte: value };
+	            return this;
+	        }
+	    }, {
+	        key: 'lessThanOrEqualTo',
+	        value: function lessThanOrEqualTo(key, value) {
+	            this._where[key] = { $lte: value };
+	            return this;
+	        }
+	    }, {
+	        key: 'select',
+	        value: function select() {
+	            for (var _len = arguments.length, keys = Array(_len), _key = 0; _key < _len; _key++) {
+	                keys[_key] = arguments[_key];
+	            }
+	
+	            this._params.keys = keys.join(',');
+	            return this;
+	        }
+	    }, {
 	        key: '_createParams',
 	        value: function _createParams() {
-	            var params = {
-	                where: this._where
-	            };
+	            return this._params;
 	
-	            if (this._limit >= 0) {
-	                params.limit = this._limit;
-	            }
-	            if (this._skip > 0) {
-	                params.skip = this._skip;
-	            }
-	            if (this._order !== undefined) {
-	                params.order = this._order;
-	            }
-	            return params;
+	            // let params = {
+	            //     where: this._where
+	            // };
+	            //
+	            //
+	            // if (this._order !== undefined) {
+	            //     params.order = this._order;
+	            // }
+	            // return params;
 	        }
 	    }]);
 	
