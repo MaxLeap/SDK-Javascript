@@ -11,7 +11,7 @@
     "webpack-watch": "webpack --progress --colors --watch",
     "webpack-uat": "rm ./dist/MLTimeline.js.map || true && webpack --progress --colors",
     "webpack-prod": "rm ./dist/MLTimeline.js.map || true && NODE_ENV=production webpack -p --progress --colors",
-    "jsdoc": "jsdoc ./lib/ -d ./api-docs/v2.1.0"
+    "jsdoc": "jsdoc ./lib/ -d ./api-docs/v${npm_package_version}"
   },
   "dependencies": {
     "detector": "^2.4.5",
