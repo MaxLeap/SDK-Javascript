@@ -8235,10 +8235,12 @@ var ML = ML || {}; ML["Timeline"] =
 	        if (!this.getUserId()) {
 	            this.anonymousUserFetch = this._createAnonymousUser();
 	            this.anonymousUserFetch.then(function (res) {
-	                _this.userId = res.objectId;
-	                _this.userSessionToken = res.sessionToken;
-	                localStorage.setItem(ML_USER_ID_FALG, res.objectId);
-	                localStorage.setItem(ML_USER_SESSION_TOKEN_FLAG, res.sessionToken);
+	                if (res && res.objectId) {
+	                    _this.userId = res.objectId;
+	                    _this.userSessionToken = res.sessionToken;
+	                    localStorage.setItem(ML_USER_ID_FALG, res.objectId);
+	                    localStorage.setItem(ML_USER_SESSION_TOKEN_FLAG, res.sessionToken);
+	                }
 	            });
 	        } else {
 	            this.anonymousUserFetch = Promise.resolve(this.getUserId());
@@ -8283,18 +8285,20 @@ var ML = ML || {}; ML["Timeline"] =
 	            var _this3 = this;
 	
 	            return this.anonymousUserFetch.then(function (res) {
-	                return fetch(_this3.serverURL + '/2.0/users/' + _this3.userId, {
-	                    method: 'PUT',
-	                    headers: {
-	                        'Content-Type': 'application/json',
-	                        'X-ML-AppId': _this3.appId,
-	                        'X-ML-APIKey': _this3.restAPIKey,
-	                        'X-ML-Session-Token': _this3.userSessionToken
-	                    },
-	                    body: JSON.stringify(params)
-	                }).then(function (res) {
-	                    return res.json();
-	                });
+	                if (_this3.userId) {
+	                    return fetch(_this3.serverURL + '/2.0/users/' + _this3.userId, {
+	                        method: 'PUT',
+	                        headers: {
+	                            'Content-Type': 'application/json',
+	                            'X-ML-AppId': _this3.appId,
+	                            'X-ML-APIKey': _this3.restAPIKey,
+	                            'X-ML-Session-Token': _this3.userSessionToken
+	                        },
+	                        body: JSON.stringify(params)
+	                    }).then(function (res) {
+	                        return res.json();
+	                    });
+	                }
 	            });
 	        }
 	
