@@ -13,9 +13,6 @@ describe('Timeline', function (){
                 serverURL: SERVER_URL
             });
 
-            var distinctId = '6c30eefa-d256-4237-812c-061f7a1e8b4a';
-            // var distinctId = uuid.v4();
-
             var params = [
                 {
                     properties:  {
@@ -31,7 +28,7 @@ describe('Timeline', function (){
                     time: new Date().getTime(),
                     event: 'CustomEvent',
                     type: 'track',
-                    distinct_id: distinctId
+                    distinct_id: uuid.v4()
                 }
             ];
 

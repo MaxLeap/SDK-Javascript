@@ -146,7 +146,6 @@ var ML = ML || {}; ML["Timeline"] =
 	            var _this2 = this;
 	
 	            return this.anonymousUserFetch.then(function (res) {
-	
 	                return fetch(_this2.serverURL + '/2.0/track/event', {
 	                    method: 'POST',
 	                    headers: {
