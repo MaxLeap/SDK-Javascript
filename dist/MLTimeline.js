@@ -190,7 +190,7 @@ var ML = ML || {}; ML["Timeline"] =
 	            return [{
 	                properties: {
 	                    _eventType: params._eventType,
-	                    _userId: this.userId, //_User表中的id, sdk调后台接口生成
+	                    _userId: '', //_User表中的id, sdk调后台接口生成, 必须留在这里占位
 	                    _userAgent: window.navigator.userAgent,
 	                    _deviceModel: 'web',
 	                    uuid: _nodeUuid2.default.v4(),
@@ -271,9 +271,18 @@ var ML = ML || {}; ML["Timeline"] =
 	    }, {
 	        key: '_trackSession',
 	        value: function _trackSession() {
-	            var params = this._mergeDefaultParams({
+	            var _this3 = this;
+	
+	            var params = {
 	                _eventType: 5,
 	                event: 'Session'
+	            };
+	            params = this._mergeDefaultParams(params);
+	
+	            Object.defineProperty(params[0].properties, '_userId', {
+	                get: function get() {
+	                    return _this3.getUserId();
+	                }
 	            });
 	
 	            this.trackEvent(params);
@@ -287,9 +296,19 @@ var ML = ML || {}; ML["Timeline"] =
 	    }, {
 	        key: '_trackSessionStart',
 	        value: function _trackSessionStart() {
-	            var params = this._mergeDefaultParams({
+	            var _this4 = this;
+	
+	            var params = {
 	                _eventType: 3,
 	                event: 'SessionStart'
+	            };
+	
+	            params = this._mergeDefaultParams(params);
+	
+	            Object.defineProperty(params[0].properties, '_userId', {
+	                get: function get() {
+	                    return _this4.getUserId();
+	                }
 	            });
 	
 	            this.trackEvent(params);
