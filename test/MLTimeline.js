@@ -6,37 +6,34 @@ var SERVER_URL = 'https://apiuat.maxleap.cn';
 
 describe('Timeline', function (){
     describe('#事件追踪', function(){
-        it('创建匿名用户', function(done){
+        it.only('自定义事件', function(done){
             var timeline = new ML.Timeline({
                 appId: APP_ID,
                 restAPIKey: REST_API_KEY,
                 serverURL: SERVER_URL
             });
 
-            timeline._createAnonymousUser().then(function(res){
-                expect(res.objectId).to.be.ok();
-                done();
-            });
-        });
+            var distinctId = '6c30eefa-d256-4237-812c-061f7a1e8b4a';
+            // var distinctId = uuid.v4();
 
-        it.only('自定义事件', function(done){
             var params = [
                 {
-                    "properties":  {
+                    properties:  {
                         _eventType:5,
-                        _userAgent: window.navigator.userAgent
+                        _userAgent: window.navigator.userAgent,
+                        get _userId(){
+                            return timeline.getUserId();
+                        },
+                        get appUserId() {
+                            return timeline.getInstallationId();
+                        }
                     },
                     time: new Date().getTime(),
                     event: 'CustomEvent',
                     type: 'track',
-                    distinct_id: '6e87a18ac0ef4435807433211760ax12'
+                    distinct_id: distinctId
                 }
             ];
-
-            var timeline = new ML.Timeline({
-                appId: APP_ID,
-                serverURL: SERVER_URL
-            });
 
             timeline.trackEvent(params).then(function(res){
                 expect(res.errorCode).to.be(0);
