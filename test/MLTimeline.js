@@ -1,16 +1,28 @@
 'use strict';
 
 var APP_ID = '572afb8a667a230001e5642a';
-var USER_ID = '57b580feaa150a0001c6165e';
+var REST_API_KEY = 'MlpuX1ZRVDFqb3N1UGxTZGpsV0U3Zw';
 var SERVER_URL = 'https://apiuat.maxleap.cn';
 
 describe('Timeline', function (){
     describe('#事件追踪', function(){
-        it('自定义事件', function(done){
+        it('创建匿名用户', function(done){
+            var timeline = new ML.Timeline({
+                appId: APP_ID,
+                restAPIKey: REST_API_KEY,
+                serverURL: SERVER_URL
+            });
+
+            timeline._createAnonymousUser().then(function(res){
+                expect(res.objectId).to.be.ok();
+                done();
+            });
+        });
+
+        it.only('自定义事件', function(done){
             var params = [
                 {
                     "properties":  {
-                        _userId: USER_ID,
                         _eventType:5,
                         _userAgent: window.navigator.userAgent
                     },
@@ -23,7 +35,6 @@ describe('Timeline', function (){
 
             var timeline = new ML.Timeline({
                 appId: APP_ID,
-                userId: USER_ID,
                 serverURL: SERVER_URL
             });
 

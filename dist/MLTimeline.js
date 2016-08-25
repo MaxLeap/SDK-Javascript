@@ -8200,6 +8200,7 @@ var ML = ML || {}; ML["Timeline"] =
 	
 	        this.UNKNOWN = '0,0';
 	        this.appId = props.appId;
+	        this.restAPIKey = props.restAPIKey;
 	        this.userId = props.userId;
 	
 	        //用户可以使用默认 server 地址, 也可以用自己的 server
@@ -8225,17 +8226,47 @@ var ML = ML || {}; ML["Timeline"] =
 	    }
 	
 	    /**
-	     * 页面初始化时自动收集信息
+	     * 创建匿名用户
 	     * @private
 	     */
 	
 	
 	    _createClass(Timeline, [{
-	        key: '_autoTrack',
-	        value: function _autoTrack() {
-	            this._trackSession();
-	            this._trackSessionStart();
+	        key: '_createAnonymousUser',
+	        value: function _createAnonymousUser() {
+	            var params = {
+	                authData: {
+	                    anonymous: {
+	                        id: _nodeUuid2.default.v4()
+	                    }
+	                },
+	                installationIds: [this.installation]
+	            };
+	
+	            return fetch(this.serverURL + '/2.0/users', {
+	                method: 'POST',
+	                headers: {
+	                    'Content-Type': 'application/json',
+	                    'X-ML-AppId': this.appId,
+	                    'X-ML-APIKey': this.restAPIKey
+	                },
+	                body: JSON.stringify(params)
+	            }).then(function (res) {
+	                return res.json();
+	            });
 	        }
+	
+	        /**
+	         * 页面初始化时自动收集信息
+	         * @private
+	         */
+	
+	    }, {
+	        key: '_autoTrack',
+	        value: function _autoTrack() {}
+	        // this._trackSession();
+	        // this._trackSessionStart();
+	
 	
 	        /**
 	         * Session 是一个用户行为的完整周期
@@ -8280,12 +8311,12 @@ var ML = ML || {}; ML["Timeline"] =
 	            return [{
 	                properties: {
 	                    _eventType: params._eventType,
-	                    _userId: this.userId,
+	                    _userId: this.userId, //_User表中的id, sdk调后台接口生成
 	                    _userAgent: window.navigator.userAgent,
 	                    _deviceModel: 'web',
 	                    uuid: _nodeUuid2.default.v4(),
 	                    deviceId: this.installation,
-	                    appUserId: this.appUserId, //_User表中的id, 由调用者传入
+	                    appUserId: this.installation, //installation, 客户端生成
 	                    appId: this.appId, //appId, 由调用者传入
 	                    startTime: new Date().getTime(),
 	                    userCreateTime: Number(this.installationTime),
