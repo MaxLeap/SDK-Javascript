@@ -23,7 +23,8 @@ let getEntry =()=>{
     let modules = ['MLTimeline'];
     let entry = {};
     modules.forEach((key)=>{
-        entry[key] = [`${PATHS.app}/${key}.js`];
+        // entry[key] = [`${PATHS.app}/${key}.js`];
+        entry[key] = ['babel-polyfill', `${PATHS.app}/${key}.js`];
     });
     return entry;
 };
