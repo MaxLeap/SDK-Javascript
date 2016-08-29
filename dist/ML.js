@@ -66,6 +66,8 @@ var ML =
 	
 	__webpack_require__(5);
 	
+	__webpack_require__(6);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	exports.default = _MLConfig2.default;
@@ -668,6 +670,9 @@ var ML =
 	    _createClass(MLObject, [{
 	        key: 'set',
 	        value: function set(key, value) {
+	            if (value.toJSON) {
+	                this.attributes[key] = value.toJSON();
+	            }
 	            this.attributes[key] = value;
 	        }
 	    }, {
@@ -1256,6 +1261,35 @@ var ML =
 	            return this;
 	        }
 	    }, {
+	        key: 'near',
+	        value: function near(key, point) {
+	            this._params.where[key] = { $nearSphere: point };
+	            return this;
+	        }
+	    }, {
+	        key: 'withinRadians',
+	        value: function withinRadians(key, point, distance) {
+	            this.near(key, point);
+	            this._params.where[key] = { $maxDistance: distance };
+	            return this;
+	        }
+	    }, {
+	        key: 'withinMiles',
+	        value: function withinMiles(key, point, distance) {
+	            return this.withinRadians(key, point, distance / 3958.8);
+	        }
+	    }, {
+	        key: 'withinKilometers',
+	        value: function withinKilometers(key, point, distance) {
+	            return this.withinRadians(key, point, distance / 6371.0);
+	        }
+	    }, {
+	        key: 'withinGeoBox',
+	        value: function withinGeoBox(key, southwest, northeast) {
+	            this._params.where[key] = { $within: { '$box': [southwest, northeast] } };
+	            return this;
+	        }
+	    }, {
 	        key: '_quote',
 	        value: function _quote(s) {
 	            return '\\Q' + s.replace('\\E', '\\E\\\\E\\Q') + '\\E';
@@ -1271,6 +1305,93 @@ var ML =
 	}();
 	
 	_MLConfig2.default.Query = MLQuery;
+	
+	exports.default = _MLConfig2.default;
+	module.exports = exports['default'];
+
+/***/ },
+/* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	__webpack_require__(3);
+	
+	var _MLConfig = __webpack_require__(2);
+	
+	var _MLConfig2 = _interopRequireDefault(_MLConfig);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	/** ML 地理位置 */
+	var MLGeoPoint = function () {
+	    function MLGeoPoint(arg1, arg2) {
+	        _classCallCheck(this, MLGeoPoint);
+	
+	        this.latitude = arg1;
+	        this.longitude = arg2;
+	    }
+	
+	    _createClass(MLGeoPoint, [{
+	        key: 'radiansTo',
+	        value: function radiansTo(point) {
+	            var d2r = Math.PI / 180.0;
+	            var lat1rad = this.latitude * d2r;
+	            var long1rad = this.longitude * d2r;
+	            var lat2rad = point.latitude * d2r;
+	            var long2rad = point.longitude * d2r;
+	            var deltaLat = lat1rad - lat2rad;
+	            var deltaLong = long1rad - long2rad;
+	            var sinDeltaLatDiv2 = Math.sin(deltaLat / 2);
+	            var sinDeltaLongDiv2 = Math.sin(deltaLong / 2);
+	            var a = sinDeltaLatDiv2 * sinDeltaLatDiv2 + Math.cos(lat1rad) * Math.cos(lat2rad) * sinDeltaLongDiv2 * sinDeltaLongDiv2;
+	            a = Math.min(1.0, a);
+	            return 2 * Math.asin(Math.sqrt(a));
+	        }
+	    }, {
+	        key: 'kilometersTo',
+	        value: function kilometersTo(point) {
+	            return this.radiansTo(point) * 6371.0;
+	        }
+	    }, {
+	        key: 'milesTo',
+	        value: function milesTo(point) {
+	            return this.radiansTo(point) * 3958.8;
+	        }
+	    }, {
+	        key: 'toJSON',
+	        value: function toJSON() {
+	            return {
+	                "__type": "GeoPoint",
+	                latitude: this.latitude,
+	                longitude: this.longitude
+	            };
+	        }
+	    }], [{
+	        key: 'current',
+	        value: function current(options) {
+	            return new Promise(function (resolve, reject) {
+	                window.navigator.geolocation.getCurrentPosition(function (location) {
+	                    resolve(new _MLConfig2.default.GeoPoint(location.coords.latitude, location.coords.longitude), function (error) {
+	                        reject(error);
+	                    });
+	                });
+	            });
+	        }
+	    }]);
+	
+	    return MLGeoPoint;
+	}();
+	
+	_MLConfig2.default.GeoPoint = MLGeoPoint;
 	
 	exports.default = _MLConfig2.default;
 	module.exports = exports['default'];
