@@ -617,7 +617,10 @@ var ML =
 	        _classCallCheck(this, MLObject);
 	
 	        this._buildResult = function (res) {
-	            _this.id = res.objectId;
+	            //仅当 this.id 不存在时,才会从 res.objectId 赋值, 因为在 update 时, 后台不返回 objectId
+	            if (!_this.id) {
+	                _this.id = res.objectId;
+	            }
 	            return _this;
 	        };
 	
@@ -650,7 +653,6 @@ var ML =
 	        };
 	
 	        this.attributes = props || {};
-	        this._batchRequest = [];
 	        this._opAddQueue = [];
 	    }
 	
@@ -682,14 +684,20 @@ var ML =
 	    }, {
 	        key: 'save',
 	        value: function save(attrs) {
-	
-	            this.deepSave();
-	
 	            for (var key in attrs) {
 	                this.set(key, attrs[key]);
 	            }
-	            return fetch(_MLConfig2.default.serverURL + '2.0/classes/' + this._className, {
-	                method: 'POST',
+	            if (this.id) {
+	                return this._update();
+	            } else {
+	                return this._create();
+	            }
+	        }
+	    }, {
+	        key: 'destroy',
+	        value: function destroy() {
+	            return fetch(_MLConfig2.default.serverURL + '2.0/classes/' + this._className + '/' + this.id, {
+	                method: 'DELETE',
 	                headers: {
 	                    'Content-Type': 'application/json',
 	                    'X-ML-AppId': _MLConfig2.default.appId,
@@ -698,37 +706,20 @@ var ML =
 	                body: JSON.stringify(this.attributes)
 	            }).then(function (res) {
 	                return res.json();
-	            }).then(this._buildResult);
-	        }
-	    }, {
-	        key: 'deepSave',
-	        value: function deepSave() {
-	            var childKeys = Object.keys(this._opAddQueue);
-	
-	            if (childKeys.length) {
-	                return fetch(_MLConfig2.default.serverURL + '2.0/batch', {
-	                    method: 'POST',
-	                    headers: {
-	                        'Content-Type': 'application/json',
-	                        'X-ML-AppId': _MLConfig2.default.appId,
-	                        'X-ML-APIKey': _MLConfig2.default.restApiKey
-	                    },
-	                    body: JSON.stringify(this.attributes)
-	                }).then(function (res) {
-	                    return res.json();
-	                }).then(function (res) {
-	                    console.log(res);
-	                });
-	            }
+	            });
 	        }
 	    }, {
 	        key: 'add',
 	        value: function add(key, value) {
-	            this._opAddQueue[key] = {
-	                body: value.attributes,
-	                method: 'POST',
-	                path: '/2.0/classes/' + value._className
-	            };
+	            this._opAddQueue.push({
+	                operation: {
+	                    body: value.attributes,
+	                    method: 'POST',
+	                    path: '/2.0/classes/' + value._className
+	                },
+	                object: value,
+	                key: key
+	            });
 	        }
 	    }, {
 	        key: 'fetch',
@@ -754,6 +745,105 @@ var ML =
 	                return res.json();
 	            }).then(this._buildResult);
 	        })
+	    }, {
+	        key: '_create',
+	        value: function _create() {
+	            var _this2 = this;
+	
+	            var saveAttrs = function saveAttrs() {
+	                return fetch(_MLConfig2.default.serverURL + '2.0/classes/' + _this2._className, {
+	                    method: 'POST',
+	                    headers: {
+	                        'Content-Type': 'application/json',
+	                        'X-ML-AppId': _MLConfig2.default.appId,
+	                        'X-ML-APIKey': _MLConfig2.default.restApiKey
+	                    },
+	                    body: JSON.stringify(_this2.attributes)
+	                }).then(function (res) {
+	                    return res.json();
+	                }).then(function (res) {
+	                    _this2._opAddQueue.forEach(function (item) {
+	                        _this2.attributes[item.key] = [];
+	                    });
+	
+	                    _this2._opAddQueue.forEach(function (item) {
+	                        _this2.attributes[item.key].push(item.object);
+	                    });
+	                    return res;
+	                }).then(_this2._buildResult);
+	            };
+	
+	            if (this._opAddQueue.length) {
+	                return this._deepSave().then(saveAttrs);
+	            } else {
+	                return saveAttrs();
+	            }
+	        }
+	    }, {
+	        key: '_update',
+	        value: function _update() {
+	            var _this3 = this;
+	
+	            var saveAttrs = function saveAttrs() {
+	                return fetch(_MLConfig2.default.serverURL + '2.0/classes/' + _this3._className + '/' + _this3.id, {
+	                    method: 'PUT',
+	                    headers: {
+	                        'Content-Type': 'application/json',
+	                        'X-ML-AppId': _MLConfig2.default.appId,
+	                        'X-ML-APIKey': _MLConfig2.default.restApiKey
+	                    },
+	                    body: JSON.stringify(_this3.attributes)
+	                }).then(function (res) {
+	                    return res.json();
+	                }).then(function (res) {
+	                    _this3._opAddQueue.forEach(function (item) {
+	                        _this3.attributes[item.key] = item.object;
+	                    });
+	                    return res;
+	                }).then(_this3._buildResult);
+	            };
+	
+	            if (this._opAddQueue.length) {
+	                return this._deepSave().then(saveAttrs);
+	            } else {
+	                return saveAttrs();
+	            }
+	        }
+	    }, {
+	        key: '_deepSave',
+	        value: function _deepSave() {
+	            var _this4 = this;
+	
+	            var requestParams = {
+	                requests: this._opAddQueue.map(function (item) {
+	                    return item.operation;
+	                })
+	            };
+	
+	            return fetch(_MLConfig2.default.serverURL + '2.0/batch', {
+	                method: 'POST',
+	                headers: {
+	                    'Content-Type': 'application/json',
+	                    'X-ML-AppId': _MLConfig2.default.appId,
+	                    'X-ML-APIKey': _MLConfig2.default.restApiKey
+	                },
+	                body: JSON.stringify(requestParams)
+	            }).then(function (res) {
+	                return res.json();
+	            }).then(function (res) {
+	                res.forEach(function (item, i) {
+	                    _this4._opAddQueue[i].object.id = item.objectId;
+	                    if (!_this4.attributes[_this4._opAddQueue[i].key]) {
+	                        _this4.attributes[_this4._opAddQueue[i].key] = [];
+	                    }
+	                    _this4.attributes[_this4._opAddQueue[i].key].push({
+	                        __type: 'Pointer',
+	                        className: _this4._opAddQueue[i].object._className,
+	                        objectId: _this4._opAddQueue[i].object.id
+	                    });
+	                });
+	            });
+	        }
 	    }], [{
 	        key: 'extend',
 	        value: function extend(className, protoProps, staticProps) {
@@ -777,6 +867,27 @@ var ML =
 	            Child.prototype._className = className;
 	
 	            return Child;
+	        }
+	    }, {
+	        key: 'destroyAll',
+	        value: function destroyAll(values) {
+	            var batchDeleteParams = values.map(function (item) {
+	                return {
+	                    method: 'delete',
+	                    path: 'classes/' + item._className + '/' + item.id
+	                };
+	            });
+	            return fetch(_MLConfig2.default.serverURL + '2.0/batch', {
+	                method: 'POST',
+	                headers: {
+	                    'Content-Type': 'application/json',
+	                    'X-ML-AppId': _MLConfig2.default.appId,
+	                    'X-ML-APIKey': _MLConfig2.default.restApiKey
+	                },
+	                body: JSON.stringify({ requests: batchDeleteParams })
+	            }).then(function (res) {
+	                return res.json();
+	            });
 	        }
 	    }]);
 	
