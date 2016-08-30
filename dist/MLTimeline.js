@@ -8323,6 +8323,16 @@ var ML = ML || {}; ML["Timeline"] =
 	        }
 	
 	        /**
+	         * 获取后台标准格式的 uuid, 该 uuid 每条请求都不同
+	         */
+	
+	    }, {
+	        key: 'getDistinctId',
+	        value: function getDistinctId() {
+	            return _nodeUuid2.default.v4();
+	        }
+	
+	        /**
 	         * SDK 会自动收集一些字段
 	         * @param {object} params - 覆盖默认字段
 	         * @private
