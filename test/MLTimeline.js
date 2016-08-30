@@ -5,6 +5,7 @@ var REST_API_KEY = 'MlpuX1ZRVDFqb3N1UGxTZGpsV0U3Zw';
 var SERVER_URL = 'https://apiuat.maxleap.cn';
 
 describe.only('Timeline', function (){
+    this.timeout(5000);
     var timeline = new ML.Timeline({
         appId: APP_ID,
         restAPIKey: REST_API_KEY,
@@ -27,7 +28,9 @@ describe.only('Timeline', function (){
                     time: new Date().getTime(),
                     event: 'CustomEvent',
                     type: 'track',
-                    distinct_id: uuid.v4()
+                    get distinct_id(){
+                        return timeline.getDistinctId()
+                    }
                 }
             ];
 
