@@ -1,6 +1,6 @@
 {
   "name": "maxleap-js-sdk",
-  "version": "2.1.4",
+  "version": "2.1.5",
   "main": "./lib/ml.js",
   "description": "MaxLeap JavaScript SDK.",
   "repository": {

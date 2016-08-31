@@ -1,6 +1,7 @@
 node_modules/
 package/
 dist/js-sdk-api-docs/
+dist/*.map
 *tgz
 *.tar.gz
 release.sh

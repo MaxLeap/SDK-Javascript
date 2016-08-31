@@ -8261,8 +8261,13 @@ var ML = ML || {}; ML["Timeline"] =
 	        value: function trackEvent(params) {
 	            var _this2 = this;
 	
+	            var _ref = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+	
+	            var _ref$url = _ref.url;
+	            var url = _ref$url === undefined ? '2.0/track/event' : _ref$url;
+	
 	            return this.anonymousUserFetch.then(function (res) {
-	                return fetch(_this2.serverURL + '/2.0/track/event', {
+	                return fetch(_this2.serverURL + '/' + url, {
 	                    method: 'POST',
 	                    headers: {
 	                        'X-ML-AppId': _this2.appId
