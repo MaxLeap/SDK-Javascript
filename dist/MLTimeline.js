@@ -8176,6 +8176,10 @@ var ML = ML || {}; ML["Timeline"] =
 	
 	var _nodeUuid2 = _interopRequireDefault(_nodeUuid);
 	
+	var _tinyCookie = __webpack_require__(306);
+	
+	var _tinyCookie2 = _interopRequireDefault(_tinyCookie);
+	
 	var _DeviceDetector = __webpack_require__(301);
 	
 	var _DeviceDetector2 = _interopRequireDefault(_DeviceDetector);
@@ -8189,6 +8193,12 @@ var ML = ML || {}; ML["Timeline"] =
 	var ML_USER_SESSION_TOKEN_FLAG = 'ML_USER_SESSION_TOKEN_FLAG';
 	var ML_INSTALLATION_FLAG = 'ML_INSTALLATION_FLAG';
 	var ML_INSTALLATION_TIME = 'ML_INSTALLATION_TIME';
+	
+	//覆写 Cookie 的 set 方法
+	var originalCookieSet = _tinyCookie2.default.set;
+	_tinyCookie2.default.set = function (key, value) {
+	    originalCookieSet(key, value, { expires: '1Y' });
+	};
 	
 	/** Timeline 事件数据收集 */
 	
@@ -8210,25 +8220,19 @@ var ML = ML || {}; ML["Timeline"] =
 	        //用户可以使用默认 server 地址, 也可以用自己的 server
 	        this.serverURL = props.serverURL || ML.serverURL || SERVER_URL;
 	
-	        this.userId = localStorage.getItem(ML_USER_ID_FALG); //SDK 自动创建的匿名用户的 objectId
-	        this.userSessionToken = localStorage.getItem(ML_USER_SESSION_TOKEN_FLAG); //SDK 自动创建的匿名用户的 sessionToken
-	        this.installation = localStorage.getItem(ML_INSTALLATION_FLAG);
-	        this.installationTime = localStorage.getItem(ML_INSTALLATION_TIME);
+	        this.userId = _tinyCookie2.default.get(ML_USER_ID_FALG); //SDK 自动创建的匿名用户的 objectId
+	        this.userSessionToken = _tinyCookie2.default.get(ML_USER_SESSION_TOKEN_FLAG); //SDK 自动创建的匿名用户的 sessionToken
+	        this.installation = _tinyCookie2.default.get(ML_INSTALLATION_FLAG);
+	        this.installationTime = _tinyCookie2.default.get(ML_INSTALLATION_TIME);
 	
-	        //如果用户第一次访问页面, 则设置标示放在 localStorage 中
+	        //如果用户第一次访问页面, 则设置标示放在 cookie 中
 	        if (!this.installation) {
-	            try {
-	                //safari 的隐身模式不允许设置 localStorage
-	                var mlInstallationFlag = _nodeUuid2.default.v4();
-	                var mlInstallationTime = new Date().getTime();
-	                this.installation = mlInstallationFlag;
-	                this.installationTime = mlInstallationTime;
-	                localStorage.setItem(ML_INSTALLATION_FLAG, mlInstallationFlag);
-	                localStorage.setItem(ML_INSTALLATION_TIME, mlInstallationTime);
-	            } catch (e) {
-	                console.warn('请关闭隐身模式');
-	                return;
-	            }
+	            var mlInstallationFlag = _nodeUuid2.default.v4();
+	            var mlInstallationTime = new Date().getTime();
+	            this.installation = mlInstallationFlag;
+	            this.installationTime = mlInstallationTime;
+	            _tinyCookie2.default.set(ML_INSTALLATION_FLAG, mlInstallationFlag);
+	            _tinyCookie2.default.set(ML_INSTALLATION_TIME, mlInstallationTime);
 	        }
 	
 	        //如果没有匿名用户, 则先创建匿名用户
@@ -8238,8 +8242,8 @@ var ML = ML || {}; ML["Timeline"] =
 	                if (res && res.objectId) {
 	                    _this.userId = res.objectId;
 	                    _this.userSessionToken = res.sessionToken;
-	                    localStorage.setItem(ML_USER_ID_FALG, res.objectId);
-	                    localStorage.setItem(ML_USER_SESSION_TOKEN_FLAG, res.sessionToken);
+	                    _tinyCookie2.default.set(ML_USER_ID_FALG, res.objectId);
+	                    _tinyCookie2.default.set(ML_USER_SESSION_TOKEN_FLAG, res.sessionToken);
 	                }
 	            });
 	        } else {
@@ -8349,7 +8353,7 @@ var ML = ML || {}; ML["Timeline"] =
 	            return [{
 	                properties: {
 	                    _eventType: params._eventType,
-	                    _userId: '', //_User表中的id, sdk调后台接口生成, 必须留在这里占位
+	                    _userId: '', //_User表中的id, sdk调后台接口生成
 	                    _userAgent: window.navigator.userAgent,
 	                    _deviceModel: 'web',
 	                    uuid: _nodeUuid2.default.v4(),
@@ -11959,6 +11963,156 @@ var ML = ML || {}; ML["Timeline"] =
 	  re_msie: re_msie
 	};
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+/* 306 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+	 * tiny-cookie - A tiny cookie manipulation plugin
+	 * https://github.com/Alex1990/tiny-cookie
+	 * Under the MIT license | (c) Alex Chao
+	 */
+	
+	!(function(root, factory) {
+	
+	  // Uses CommonJS, AMD or browser global to create a jQuery plugin.
+	  // See: https://github.com/umdjs/umd
+	  if (true) {
+	    // Expose this plugin as an AMD module. Register an anonymous module.
+	    !(__WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.call(exports, __webpack_require__, exports, module)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	  } else if (typeof exports === 'object') {
+	    // Node/CommonJS module
+	    module.exports = factory();
+	  } else {
+	    // Browser globals 
+	    root.Cookie = factory();
+	  }
+	
+	}(this, function() {
+	
+	  'use strict';
+	
+	  // The public function which can get/set/remove cookie.
+	  function Cookie(key, value, opts) {
+	    if (value === void 0) {
+	      return Cookie.get(key);
+	    } else if (value === null) {
+	      Cookie.remove(key);
+	    } else {
+	      Cookie.set(key, value, opts);
+	    }
+	  }
+	
+	  // Check if the cookie is enabled.
+	  Cookie.enabled = function() {
+	    var key = '__test_key';
+	    var enabled;
+	
+	    document.cookie = key + '=1';
+	    enabled = !!document.cookie;
+	
+	    if (enabled) Cookie.remove(key);
+	
+	    return enabled;
+	  };
+	
+	  // Get the cookie value by the key.
+	  Cookie.get = function(key, raw) {
+	    if (typeof key !== 'string' || !key) return null;
+	
+	    key = '(?:^|; )' + escapeRe(key) + '(?:=([^;]*?))?(?:;|$)';
+	
+	    var reKey = new RegExp(key);
+	    var res = reKey.exec(document.cookie);
+	
+	    return res !== null ? (raw ? res[1] : decodeURIComponent(res[1])) : null;
+	  };
+	
+	  // Get the cookie's value without decoding.
+	  Cookie.getRaw = function(key) {
+	    return Cookie.get(key, true);
+	  };
+	
+	  // Set a cookie.
+	  Cookie.set = function(key, value, raw, opts) {
+	    if (raw !== true) {
+	      opts = raw;
+	      raw = false;
+	    }
+	    opts = opts ? convert(opts) : convert({});
+	    var cookie = key + '=' + (raw ? value : encodeURIComponent(value)) + opts;
+	    document.cookie = cookie;
+	  };
+	
+	  // Set a cookie without encoding the value.
+	  Cookie.setRaw = function(key, value, opts) {
+	    Cookie.set(key, value, true, opts);
+	  };
+	
+	  // Remove a cookie by the specified key.
+	  Cookie.remove = function(key) {
+	    Cookie.set(key, 'a', { expires: new Date() });
+	  };
+	
+	  // Helper function
+	  // ---------------
+	
+	  // Escape special characters.
+	  function escapeRe(str) {
+	    return str.replace(/[.*+?^$|[\](){}\\-]/g, '\\$&');
+	  }
+	
+	  // Convert an object to a cookie option string.
+	  function convert(opts) {
+	    var res = '';
+	
+	    for (var p in opts) {
+	      if (opts.hasOwnProperty(p)) {
+	
+	        if (p === 'expires') {
+	          var expires = opts[p];
+	          if (typeof expires !== 'object') {
+	            expires += typeof expires === 'number' ? 'D' : '';
+	            expires = computeExpires(expires);
+	          }
+	          opts[p] = expires.toUTCString();
+	        }
+	
+	        res += ';' + p + '=' + opts[p];
+	      }
+	    }
+	
+	    if (!opts.hasOwnProperty('path')) {
+	      res += ';path=/';
+	    }
+	
+	    return res;
+	  }
+	
+	  // Return a future date by the given string.
+	  function computeExpires(str) {
+	    var expires = new Date();
+	    var lastCh = str.charAt(str.length - 1);
+	    var value = parseInt(str, 10);
+	
+	    switch (lastCh) {
+	      case 'Y': expires.setFullYear(expires.getFullYear() + value); break;
+	      case 'M': expires.setMonth(expires.getMonth() + value); break;
+	      case 'D': expires.setDate(expires.getDate() + value); break;
+	      case 'h': expires.setHours(expires.getHours() + value); break;
+	      case 'm': expires.setMinutes(expires.getMinutes() + value); break;
+	      case 's': expires.setSeconds(expires.getSeconds() + value); break;
+	      default: expires = new Date(str);
+	    }
+	
+	    return expires;
+	  }
+	
+	  return Cookie;
+	
+	}));
+
 
 /***/ }
 /******/ ]);
