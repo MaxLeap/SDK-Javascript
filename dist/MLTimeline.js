@@ -8176,11 +8176,11 @@ var ML = ML || {}; ML["Timeline"] =
 	
 	var _nodeUuid2 = _interopRequireDefault(_nodeUuid);
 	
-	var _tinyCookie = __webpack_require__(306);
+	var _tinyCookie = __webpack_require__(301);
 	
 	var _tinyCookie2 = _interopRequireDefault(_tinyCookie);
 	
-	var _DeviceDetector = __webpack_require__(301);
+	var _DeviceDetector = __webpack_require__(302);
 	
 	var _DeviceDetector2 = _interopRequireDefault(_DeviceDetector);
 	
@@ -8211,6 +8211,12 @@ var ML = ML || {}; ML["Timeline"] =
 	        var _this = this;
 	
 	        _classCallCheck(this, Timeline);
+	
+	        this._catchFetch = function (res) {
+	            return res.json().catch(function (e) {
+	                console.log('请求出错:', e);
+	            });
+	        };
 	
 	        this.UNKNOWN = '0,0';
 	        this.appId = props.appId;
@@ -8277,9 +8283,7 @@ var ML = ML || {}; ML["Timeline"] =
 	                        'X-ML-AppId': _this2.appId
 	                    },
 	                    body: JSON.stringify(params)
-	                }).then(function (res) {
-	                    return res.json();
-	                });
+	                }).then(_this2._catchFetch);
 	            });
 	        }
 	
@@ -8304,9 +8308,7 @@ var ML = ML || {}; ML["Timeline"] =
 	                            'X-ML-Session-Token': _this3.userSessionToken
 	                        },
 	                        body: JSON.stringify(params)
-	                    }).then(function (res) {
-	                        return res.json();
-	                    });
+	                    }).then(_this3._catchFetch);
 	                }
 	            });
 	        }
@@ -8409,18 +8411,16 @@ var ML = ML || {}; ML["Timeline"] =
 	                    'X-ML-APIKey': this.restAPIKey
 	                },
 	                body: JSON.stringify(params)
-	            }).then(function (res) {
-	                return res.json();
-	            });
+	            }).then(this._catchFetch);
 	        }
+	    }, {
+	        key: '_autoTrack',
+	
 	
 	        /**
 	         * 页面初始化时自动收集信息
 	         * @private
 	         */
-	
-	    }, {
-	        key: '_autoTrack',
 	        value: function _autoTrack() {
 	            this._trackSession();
 	            this._trackSessionStart();
@@ -9180,6 +9180,156 @@ var ML = ML || {}; ML["Timeline"] =
 /* 301 */
 /***/ function(module, exports, __webpack_require__) {
 
+	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+	 * tiny-cookie - A tiny cookie manipulation plugin
+	 * https://github.com/Alex1990/tiny-cookie
+	 * Under the MIT license | (c) Alex Chao
+	 */
+	
+	!(function(root, factory) {
+	
+	  // Uses CommonJS, AMD or browser global to create a jQuery plugin.
+	  // See: https://github.com/umdjs/umd
+	  if (true) {
+	    // Expose this plugin as an AMD module. Register an anonymous module.
+	    !(__WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.call(exports, __webpack_require__, exports, module)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	  } else if (typeof exports === 'object') {
+	    // Node/CommonJS module
+	    module.exports = factory();
+	  } else {
+	    // Browser globals 
+	    root.Cookie = factory();
+	  }
+	
+	}(this, function() {
+	
+	  'use strict';
+	
+	  // The public function which can get/set/remove cookie.
+	  function Cookie(key, value, opts) {
+	    if (value === void 0) {
+	      return Cookie.get(key);
+	    } else if (value === null) {
+	      Cookie.remove(key);
+	    } else {
+	      Cookie.set(key, value, opts);
+	    }
+	  }
+	
+	  // Check if the cookie is enabled.
+	  Cookie.enabled = function() {
+	    var key = '__test_key';
+	    var enabled;
+	
+	    document.cookie = key + '=1';
+	    enabled = !!document.cookie;
+	
+	    if (enabled) Cookie.remove(key);
+	
+	    return enabled;
+	  };
+	
+	  // Get the cookie value by the key.
+	  Cookie.get = function(key, raw) {
+	    if (typeof key !== 'string' || !key) return null;
+	
+	    key = '(?:^|; )' + escapeRe(key) + '(?:=([^;]*?))?(?:;|$)';
+	
+	    var reKey = new RegExp(key);
+	    var res = reKey.exec(document.cookie);
+	
+	    return res !== null ? (raw ? res[1] : decodeURIComponent(res[1])) : null;
+	  };
+	
+	  // Get the cookie's value without decoding.
+	  Cookie.getRaw = function(key) {
+	    return Cookie.get(key, true);
+	  };
+	
+	  // Set a cookie.
+	  Cookie.set = function(key, value, raw, opts) {
+	    if (raw !== true) {
+	      opts = raw;
+	      raw = false;
+	    }
+	    opts = opts ? convert(opts) : convert({});
+	    var cookie = key + '=' + (raw ? value : encodeURIComponent(value)) + opts;
+	    document.cookie = cookie;
+	  };
+	
+	  // Set a cookie without encoding the value.
+	  Cookie.setRaw = function(key, value, opts) {
+	    Cookie.set(key, value, true, opts);
+	  };
+	
+	  // Remove a cookie by the specified key.
+	  Cookie.remove = function(key) {
+	    Cookie.set(key, 'a', { expires: new Date() });
+	  };
+	
+	  // Helper function
+	  // ---------------
+	
+	  // Escape special characters.
+	  function escapeRe(str) {
+	    return str.replace(/[.*+?^$|[\](){}\\-]/g, '\\$&');
+	  }
+	
+	  // Convert an object to a cookie option string.
+	  function convert(opts) {
+	    var res = '';
+	
+	    for (var p in opts) {
+	      if (opts.hasOwnProperty(p)) {
+	
+	        if (p === 'expires') {
+	          var expires = opts[p];
+	          if (typeof expires !== 'object') {
+	            expires += typeof expires === 'number' ? 'D' : '';
+	            expires = computeExpires(expires);
+	          }
+	          opts[p] = expires.toUTCString();
+	        }
+	
+	        res += ';' + p + '=' + opts[p];
+	      }
+	    }
+	
+	    if (!opts.hasOwnProperty('path')) {
+	      res += ';path=/';
+	    }
+	
+	    return res;
+	  }
+	
+	  // Return a future date by the given string.
+	  function computeExpires(str) {
+	    var expires = new Date();
+	    var lastCh = str.charAt(str.length - 1);
+	    var value = parseInt(str, 10);
+	
+	    switch (lastCh) {
+	      case 'Y': expires.setFullYear(expires.getFullYear() + value); break;
+	      case 'M': expires.setMonth(expires.getMonth() + value); break;
+	      case 'D': expires.setDate(expires.getDate() + value); break;
+	      case 'h': expires.setHours(expires.getHours() + value); break;
+	      case 'm': expires.setMinutes(expires.getMinutes() + value); break;
+	      case 's': expires.setSeconds(expires.getSeconds() + value); break;
+	      default: expires = new Date(str);
+	    }
+	
+	    return expires;
+	  }
+	
+	  return Cookie;
+	
+	}));
+
+
+/***/ },
+/* 302 */
+/***/ function(module, exports, __webpack_require__) {
+
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
@@ -9188,7 +9338,7 @@ var ML = ML || {}; ML["Timeline"] =
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _webDetector = __webpack_require__(302);
+	var _webDetector = __webpack_require__(303);
 	
 	var _webDetector2 = _interopRequireDefault(_webDetector);
 	
@@ -9248,15 +9398,15 @@ var ML = ML || {}; ML["Timeline"] =
 	module.exports = exports['default'];
 
 /***/ },
-/* 302 */
+/* 303 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	__webpack_require__(303);
+	__webpack_require__(304);
 	
-	var Detector = __webpack_require__(304);
-	var WebRules = __webpack_require__(305);
+	var Detector = __webpack_require__(305);
+	var WebRules = __webpack_require__(306);
 	
 	var userAgent = navigator.userAgent || "";
 	//const platform = navigator.platform || "";
@@ -9363,7 +9513,7 @@ var ML = ML || {}; ML["Timeline"] =
 	module.exports = Tan;
 
 /***/ },
-/* 303 */
+/* 304 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -11420,7 +11570,7 @@ var ML = ML || {}; ML["Timeline"] =
 
 
 /***/ },
-/* 304 */
+/* 305 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -11646,7 +11796,7 @@ var ML = ML || {}; ML["Timeline"] =
 	module.exports = Detector;
 
 /***/ },
-/* 305 */
+/* 306 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {"use strict";
@@ -11963,156 +12113,6 @@ var ML = ML || {}; ML["Timeline"] =
 	  re_msie: re_msie
 	};
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
-
-/***/ },
-/* 306 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
-	 * tiny-cookie - A tiny cookie manipulation plugin
-	 * https://github.com/Alex1990/tiny-cookie
-	 * Under the MIT license | (c) Alex Chao
-	 */
-	
-	!(function(root, factory) {
-	
-	  // Uses CommonJS, AMD or browser global to create a jQuery plugin.
-	  // See: https://github.com/umdjs/umd
-	  if (true) {
-	    // Expose this plugin as an AMD module. Register an anonymous module.
-	    !(__WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.call(exports, __webpack_require__, exports, module)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	  } else if (typeof exports === 'object') {
-	    // Node/CommonJS module
-	    module.exports = factory();
-	  } else {
-	    // Browser globals 
-	    root.Cookie = factory();
-	  }
-	
-	}(this, function() {
-	
-	  'use strict';
-	
-	  // The public function which can get/set/remove cookie.
-	  function Cookie(key, value, opts) {
-	    if (value === void 0) {
-	      return Cookie.get(key);
-	    } else if (value === null) {
-	      Cookie.remove(key);
-	    } else {
-	      Cookie.set(key, value, opts);
-	    }
-	  }
-	
-	  // Check if the cookie is enabled.
-	  Cookie.enabled = function() {
-	    var key = '__test_key';
-	    var enabled;
-	
-	    document.cookie = key + '=1';
-	    enabled = !!document.cookie;
-	
-	    if (enabled) Cookie.remove(key);
-	
-	    return enabled;
-	  };
-	
-	  // Get the cookie value by the key.
-	  Cookie.get = function(key, raw) {
-	    if (typeof key !== 'string' || !key) return null;
-	
-	    key = '(?:^|; )' + escapeRe(key) + '(?:=([^;]*?))?(?:;|$)';
-	
-	    var reKey = new RegExp(key);
-	    var res = reKey.exec(document.cookie);
-	
-	    return res !== null ? (raw ? res[1] : decodeURIComponent(res[1])) : null;
-	  };
-	
-	  // Get the cookie's value without decoding.
-	  Cookie.getRaw = function(key) {
-	    return Cookie.get(key, true);
-	  };
-	
-	  // Set a cookie.
-	  Cookie.set = function(key, value, raw, opts) {
-	    if (raw !== true) {
-	      opts = raw;
-	      raw = false;
-	    }
-	    opts = opts ? convert(opts) : convert({});
-	    var cookie = key + '=' + (raw ? value : encodeURIComponent(value)) + opts;
-	    document.cookie = cookie;
-	  };
-	
-	  // Set a cookie without encoding the value.
-	  Cookie.setRaw = function(key, value, opts) {
-	    Cookie.set(key, value, true, opts);
-	  };
-	
-	  // Remove a cookie by the specified key.
-	  Cookie.remove = function(key) {
-	    Cookie.set(key, 'a', { expires: new Date() });
-	  };
-	
-	  // Helper function
-	  // ---------------
-	
-	  // Escape special characters.
-	  function escapeRe(str) {
-	    return str.replace(/[.*+?^$|[\](){}\\-]/g, '\\$&');
-	  }
-	
-	  // Convert an object to a cookie option string.
-	  function convert(opts) {
-	    var res = '';
-	
-	    for (var p in opts) {
-	      if (opts.hasOwnProperty(p)) {
-	
-	        if (p === 'expires') {
-	          var expires = opts[p];
-	          if (typeof expires !== 'object') {
-	            expires += typeof expires === 'number' ? 'D' : '';
-	            expires = computeExpires(expires);
-	          }
-	          opts[p] = expires.toUTCString();
-	        }
-	
-	        res += ';' + p + '=' + opts[p];
-	      }
-	    }
-	
-	    if (!opts.hasOwnProperty('path')) {
-	      res += ';path=/';
-	    }
-	
-	    return res;
-	  }
-	
-	  // Return a future date by the given string.
-	  function computeExpires(str) {
-	    var expires = new Date();
-	    var lastCh = str.charAt(str.length - 1);
-	    var value = parseInt(str, 10);
-	
-	    switch (lastCh) {
-	      case 'Y': expires.setFullYear(expires.getFullYear() + value); break;
-	      case 'M': expires.setMonth(expires.getMonth() + value); break;
-	      case 'D': expires.setDate(expires.getDate() + value); break;
-	      case 'h': expires.setHours(expires.getHours() + value); break;
-	      case 'm': expires.setMinutes(expires.getMinutes() + value); break;
-	      case 's': expires.setSeconds(expires.getSeconds() + value); break;
-	      default: expires = new Date(str);
-	    }
-	
-	    return expires;
-	  }
-	
-	  return Cookie;
-	
-	}));
-
 
 /***/ }
 /******/ ]);
